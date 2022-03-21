@@ -1,0 +1,29 @@
+{
+  "name": "MockserviceTask",
+  "description": "Simple task to call mockservice every 5 minutes",
+  "group": "PlatformServices",
+  "creator": "platform@miqdigital.com",
+  "trigger": {
+    "startDateTime": null,
+    "endDateTime": null,
+    "schedule": {
+      "type": "cronExpression",
+      "value": "0 0/5 * * * ?"
+    }
+  },
+  "executor": {
+    "type": "http",
+    "httpConfig": {
+      "url": null,
+      "method": "GET",
+      "headers": {
+        "environment": "INTEGRATION",
+        "department": "TECH",
+        "team": "PLATFORMSERVICES",
+        "product": "SCHEDULING_SERVICE",
+        "owner": "platform@miqdigital",
+        "function": "Integration Tests"
+      }
+    }
+  }
+}

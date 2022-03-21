@@ -1,0 +1,25 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %highlight([%-5p]) %d{yyyy-MM-dd HH:mm:ss} %cyan([%-10thread]) [%X{X-B3-TraceId:-}/%X{X-B3-SpanId:-}] [%X{X-B3-ParentSpanId:-}] %yellow(%c{0}):%L - %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.mediaiq.caps.platform.scheduling" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="org.quartz" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="org.springframework" level="WARN" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="java.sql" level="WARN" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
