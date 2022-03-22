@@ -1,0 +1,96 @@
+environment: {{ .Values.config.environment }}
+server:
+  port: {{ .Values.config.server.port }}
+
+management:
+  endpoints:
+    enabled-by-default: {{ .Values.config.management.endpoints.enabledbydefault }}
+    web:
+      exposure:
+        include: "{{ .Values.config.management.endpoints.web.exposure.include }}"
+  endpoint:
+    health:
+      show-details: {{ .Values.config.management.endpoint.health.showdetails }}
+      show-components: {{ .Values.config.management.endpoint.health.showcomponents }}
+
+
+application:
+  httpJobCallBackTimeout: {{ .Values.config.application.httpJobCallBackTimeout }}
+  minSchedulingInterval: {{ .Values.config.application.minSchedulingInterval }}
+  messagingPublishEndpoint: "{{ .Values.config.application.messagingPublishEndpoint }}"
+  messagingDefaultPublishTopic: "{{ .Values.config.application.messagingDefaultPublishTopic }}"
+  apiGatewayToken: {{ .Values.config.application.apiGatewayToken }}
+  schedulingServiceEnv: {{ .Values.config.environment }}
+
+spring:
+  application:
+    name: {{ .Values.config.spring.application.name }}
+  datasource:
+    driver-class-name: {{ .Values.config.spring.datasource.driverclassname }}
+    hikari.pool-name: {{ .Values.config.spring.datasource.hikari.poolname }}
+    url: "{{ .Values.config.spring.datasource.url }}"
+    username: {{ .Values.config.spring.datasource.username }}
+    password: {{ .Values.config.spring.datasource.password }}
+  jackson:
+    serialization.indent_output: {{ .Values.config.spring.jackson.serialization.indent_output }}
+    serialization.WRITE_DATES_AS_TIMESTAMPS: {{ .Values.config.spring.jackson.serialization.WRITE_DATES_AS_TIMESTAMPS }}
+    deserialization.ADJUST_DATES_TO_CONTEXT_TIME_ZONE: {{ .Values.config.spring.jackson.deserialization.ADJUST_DATES_TO_CONTEXT_TIME_ZONE }}
+    mapper:
+      accept_case_insensitive_properties: {{ .Values.config.spring.jackson.mapper.accept_case_insensitive_properties }}
+
+  jpa:
+    show-sql: {{ .Values.config.spring.jpa.showsql }}
+    open-in-view: {{ .Values.config.spring.jpa.openinview }}
+    hibernate:
+      ddl-auto: {{ .Values.config.spring.jpa.hibernate.ddlauto }}
+      naming:
+        physical-strategy: {{ .Values.config.spring.jpa.hibernate.naming.physicalstrategy }}
+        implicit-strategy: {{ .Values.config.spring.jpa.hibernate.naming.implicitstrategy }}
+    properties:
+      hibernate.dialect: {{ .Values.config.spring.jpa.properties.hibernate.dialect }}
+      hibernate.generate_statistics: {{ .Values.config.spring.jpa.properties.hibernate.generate_statistics }}
+
+  datasource.quartz-data-source:
+    name: {{ .Values.config.spring.datasource.quartzdatasourcename }}
+    jdbc-url: "{{ .Values.config.spring.datasource.url }}"
+    username: {{ .Values.config.spring.datasource.username }}
+    password: {{ .Values.config.spring.datasource.password }}
+    driver-class-name: {{ .Values.config.spring.datasource.driverclassname }}
+    maxConnections: {{ .Values.config.spring.datasource.quartzdatasource.maxConnections }}
+  quartz:
+    jdbc:
+      initialize-schema: {{ .Values.config.spring.quartz.jdbc.initializeschema }}
+    job-store-type: {{ .Values.config.spring.quartz.jobstoretype }}
+    properties:
+      org.quartz:
+        scheduler:
+          instanceId: {{ .Values.config.spring.quartz.properties.org.quartz.scheduler.instanceId }}
+          instanceName: {{ .Values.config.spring.datasource.instanceName }}
+        threadPool:
+          class: {{ .Values.config.spring.quartz.properties.org.quartz.threadPool.class }}
+          threadCount: {{ .Values.config.spring.quartz.properties.org.quartz.threadPool.threadCount }}
+          threadsInheritContextClassLoaderOfInitializingThread: {{ .Values.config.spring.quartz.properties.org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread }}
+        jobStore:
+          class: {{ .Values.config.spring.quartz.properties.org.quartz.jobStore.class }}
+          driverDelegateClass: {{ .Values.config.spring.quartz.properties.org.quartz.jobStore.driverDelegateClass }}
+          tablePrefix: {{ .Values.config.spring.quartz.properties.org.quartz.jobStore.tablePrefix }}
+          isClustered: {{ .Values.config.spring.quartz.properties.org.quartz.jobStore.isClustered }}
+          #misfire  3 minutes = 3*60*1000
+          misfireThreshold: {{ .Values.config.spring.quartz.properties.org.quartz.jobStore.misfireThreshold }}
+        plugin:
+          shutdownHook:
+            class: {{ .Values.config.spring.quartz.properties.org.quartz.plugin.shutdownHook.class }}
+            cleanShutdown: {{ .Values.config.spring.quartz.properties.org.quartz.plugin.shutdownHook.cleanShutdown }}
+          jobHistory:
+            class: {{ .Values.config.spring.quartz.properties.org.quartz.plugin.jobHistory.class }}
+            jobToBeFiredMessage: "{{.Values.config.spring.quartz.properties.org.quartz.plugin.jobHistory.jobToBeFiredMessage}}"
+            jobSuccessMessage: "{{ .Values.config.spring.quartz.properties.org.quartz.plugin.jobHistory.jobSuccessMessage }}"
+            jobFailedMessage: "{{ .Values.config.spring.quartz.properties.org.quartz.plugin.jobHistory.jobFailedMessage }}"
+            jobWasVetoedMessage: "{{.Values.config.spring.quartz.properties.org.quartz.plugin.jobHistory.jobWasVetoedMessage}}"
+          triggerHistory:
+            class: {{ .Values.config.spring.quartz.properties.org.quartz.plugin.triggerHistory.class }}
+            triggerFiredMessage: "{{ .Values.config.spring.quartz.properties.org.quartz.plugin.triggerHistory.triggerFiredMessage }}"
+            triggerCompleteMessage: "{{ .Values.config.spring.quartz.properties.org.quartz.plugin.triggerHistory.triggerCompleteMessage }}"
+            triggerMisfiredMessage: "{{ .Values.config.spring.quartz.properties.org.quartz.plugin.triggerHistory.triggerMisfiredMessage }}"
+          jobExecutionHistory:
+            class: {{ .Values.config.spring.quartz.properties.org.quartz.plugin.jobExecutionHistory.class }}

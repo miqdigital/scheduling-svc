@@ -1,0 +1,11 @@
+{
+  "service": "Scheduling",
+  "team": "TechBrew",
+  "techQuality": "HIGH",
+  "businessValue": "HIGH",
+  "quadrant": "Innovate Invest",
+  "p0/p1": 0,
+  "techDebt": "LOW",
+  "hotfixCount": 2,
+  "uptime": 100
+}

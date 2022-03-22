@@ -1,0 +1,78 @@
+replicaCount: 1
+
+image:
+  repository: 836079437595.dkr.ecr.us-east-1.amazonaws.com/platform-services
+  tag: scheduling-server-${project.version}${build.number}
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: private-nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  paths:
+    - /
+  hosts:
+    - qa-scheduling.mediaiqdigital.com
+  tls: []
+
+jacocoEnabled: true
+
+config:
+  environment: qa
+  spring:
+    datasource:
+      url: jdbc:postgresql://techbrew-non-prod.cvb1rjfllvqw.us-east-1.rds.amazonaws.com:5432/scheduling_qa
+      instanceName: QuartzPostgresScheduler_INTEGRATION_TEST
+      quartzdatasourcename: quartzDataSource-INTEGRATION_TEST
+
+minReplicas: 1
+maxReplicas: 1
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 2Gi
+  requests:
+    cpu: 100m
+    memory: 512Mi
+
+annotations:
+  prometheus.io/env: "QA"
+  vault.hashicorp.com/role: "pt-scheduling-qa"
+  vault.hashicorp.com/agent-inject-secret-secrets.properties: "Platform-Vault-Kubernetes/data/scheduling-service-qa"
+  vault.hashicorp.com/agent-inject-template-secrets.properties: |
+    {{- with secret "Platform-Vault-Kubernetes/data/scheduling-service-qa" }}
+      {{ range $k, $v := .Data.data }}
+      {{- $k }}={{ $v }}
+      {{ end }}
+    {{- end }}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                  - scheduling-service-qa
+          topologyKey: "failure-domain.beta.kubernetes.io/zone"
+
+timestamp: A100
+
+istio:
+  enabled: false

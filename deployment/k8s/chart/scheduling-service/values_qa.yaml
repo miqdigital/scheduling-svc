@@ -1,0 +1,62 @@
+replicaCount: 2
+
+image:
+  repository: 836079437595.dkr.ecr.us-east-1.amazonaws.com/platform-services
+  tag: scheduling-server-1.6.0-SNAPSHOT
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: private-nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  paths:
+    - /
+  hosts:
+    - qa-scheduling.mediaiqdigital.com
+  tls: []
+
+config:
+  environment: qa
+  spring:
+    datasource:
+      url: jdbc:postgresql://techbrew-non-prod.cvb1rjfllvqw.us-east-1.rds.amazonaws.com:5432/scheduling_qa
+      instanceName: QuartzPostgresScheduler_QA
+      quartzdatasourcename: quartzDataSource-QA
+
+monitoring:
+  annotations:
+    prometheus.io/env: "QA"
+
+vault:
+  enabled: true
+  authName: kubernetes
+  roleName: pt-scheduling-qa
+  location: scheduling-service-qa
+  engineName: Platform-Vault-Kubernetes
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/instance
+            operator: In
+            values:
+            - scheduling-service-qa
+        topologyKey: "failure-domain.beta.kubernetes.io/zone"
+
+timestamp: A100

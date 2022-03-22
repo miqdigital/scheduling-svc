@@ -1,0 +1,68 @@
+replicaCount: 2
+
+image:
+  repository: 836079437595.dkr.ecr.us-east-1.amazonaws.com/platform-services
+  tag: scheduling-server-${release.tag}
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: private-nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  paths:
+    - /
+  hosts:
+    - integration-scheduling.mediaiqdigital.com
+  tls: []
+
+config:
+  environment: integration
+  spring:
+    datasource:
+      url: jdbc:postgresql://techbrew-non-prod.cvb1rjfllvqw.us-east-1.rds.amazonaws.com:5432/scheduling_integration
+      instanceName: QuartzPostgresScheduler_INTEGRATION
+      quartzdatasourcename: quartzDataSource-INTEGRATION
+
+
+annotations:
+  prometheus.io/env: "INTEGRATION"
+  vault.hashicorp.com/role: "pt-scheduling-integration"
+  vault.hashicorp.com/agent-init-first: "true"
+  vault.hashicorp.com/agent-inject-secret-secrets.properties: "Platform-Vault-Kubernetes/data/scheduling-service-integration"
+  vault.hashicorp.com/agent-inject-template-secrets.properties: |
+    {{- with secret "Platform-Vault-Kubernetes/data/scheduling-service-integration" }}
+      {{ range $k, $v := .Data.data }}
+      {{- $k }}={{ $v }}
+      {{ end }}
+    {{- end }}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/instance
+            operator: In
+            values:
+            - scheduling-service-integration
+        topologyKey: "failure-domain.beta.kubernetes.io/zone"
+
+timestamp: A100
+
+istio:
+  enabled: true
+

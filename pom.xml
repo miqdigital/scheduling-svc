@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mediaiq.caps.platform.scheduling</groupId>
+    <artifactId>scheduling-service</artifactId>
+    <version>1.12.1</version>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <description>Scheduling Service</description>
+
+    <modules>
+        <module>scheduling-commons</module>
+        <module>scheduling-client-sdk</module>
+        <module>scheduling-server</module>
+        <module>scheduling-integration-test</module>
+        <module>report</module>
+    </modules>
+
+    <scm>
+        <connection>scm:git:ssh://git@bitbucket.org/mediaiq/scheduling-service.git</connection>
+        <tag>scheduling-service-${project.version}</tag>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+        <maven.surefire.version>2.22.2</maven.surefire.version>
+        <logback.version>1.2.3</logback.version>
+        <slf4j.version>1.7.32</slf4j.version>
+        <jdk.version>17</jdk.version>
+        <junit.version>4.13.2</junit.version>
+        <spring-boot.version>2.5.6</spring-boot.version>
+        <testcontainers.version>1.16.2</testcontainers.version>
+        <release.train.version>Hoxton.SR1</release.train.version>
+        <main.class>com.mediaiq.caps.platform.scheduling.SchedulingServerStartUp</main.class>
+        <tracking-tags.version>1.5.0</tracking-tags.version>
+        <hibernate-types-52.version>2.14.0</hibernate-types-52.version>
+        <quartz.version>2.3.2</quartz.version>
+        <postgresql.version>42.3.1</postgresql.version>
+        <okhttp3.version>4.9.3</okhttp3.version>
+        <mockito-core.version>4.1.0</mockito-core.version>
+        <sonar.organization>mediaiq</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <aggregate.report.dir>report/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
+        <sonar.exclusions>**/*HttpJob.java,**/*ApplicationConfig.java</sonar.exclusions>
+        <sonar.coverage.jacoco.xmlReportPaths>${basedir}/${aggregate.report.dir}
+        </sonar.coverage.jacoco.xmlReportPaths>
+        <environment/>
+        <surefireArgLine/>
+        <build.number/>
+        <release.tag/>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>miq-nexus-releases</id>
+            <name>MediaIQ Repo</name>
+            <url>https://build.dev.miqdigital.com/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>miq-nexus-snapshots</id>
+            <name>MediaIQ snapshot Repo</name>
+            <url>https://build.dev.miqdigital.com/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>central-maven-repo</id>
+            <name>Central Maven Repo</name>
+            <url>http://central.maven.org/maven2/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>miq-nexus-releases</id>
+            <url>https://build.dev.miqdigital.com/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>miq-nexus-snapshots</id>
+            <url>https://build.dev.miqdigital.com/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.amashchenko.maven.plugin</groupId>
+                    <artifactId>gitflow-maven-plugin</artifactId>
+                    <version>1.16.0</version>
+                    <configuration>
+                        <verbose>true</verbose>
+                        <installProject>true</installProject>
+                        <gitFlowConfig>
+                            <productionBranch>master</productionBranch>
+                            <developmentBranch>development</developmentBranch>
+                            <featureBranchPrefix>feature/</featureBranchPrefix>
+                            <releaseBranchPrefix>release/</releaseBranchPrefix>
+                            <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                            <supportBranchPrefix>support/</supportBranchPrefix>
+                            <versionTagPrefix>rev-</versionTagPrefix>
+                            <origin>origin</origin>
+                        </gitFlowConfig>
+                        <commitMessages>
+                            <featureStartMessage>PT-00 update versions for feature branch
+                            </featureStartMessage>
+                            <featureFinishMessage>PT-00 update versions for development branch
+                            </featureFinishMessage>
+
+                            <hotfixStartMessage>PT-00 update versions for hotfix
+                            </hotfixStartMessage>
+                            <hotfixFinishMessage>PT-00 update for next development version
+                            </hotfixFinishMessage>
+
+                            <releaseStartMessage>PT-00 update versions for release
+                            </releaseStartMessage>
+                            <releaseFinishMessage>PT-00 update for next development version
+                            </releaseFinishMessage>
+
+                            <tagHotfixMessage>PT-00 tag hotfix</tagHotfixMessage>
+                            <tagReleaseMessage>PT-00 tag release</tagReleaseMessage>
+                        </commitMessages>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.version}</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <source>${jdk.version}</source>
+                        <target>${jdk.version}</target>
+                        <release>${jdk.version}</release>
+                    </configuration>
+                    <executions>
+                        <!-- Replacing default-compile as it is treated specially by maven -->
+                        <execution>
+                            <id>default-compile</id>
+                            <phase>none</phase>
+                        </execution>
+                        <!-- Replacing default-testCompile as it is treated specially by maven -->
+                        <execution>
+                            <id>default-testCompile</id>
+                            <phase>none</phase>
+                        </execution>
+                        <execution>
+                            <id>java-compile</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>java-test-compile</id>
+                            <phase>test-compile</phase>
+                            <goals>
+                                <goal>testCompile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
+                    <executions>
+                        <execution>
+                            <id>default-deploy</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>deploy</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <serverId>nexus</serverId>
+                        <nexusUrl>https://build.dev.miqdigital.com/nexus/</nexusUrl>
+                        <skipStaging>true</skipStaging>
+                    </configuration>
+                </plugin>
+                <!--This plugin runs a bash script to get ecr login before pushing the docker image to ecr.-->
+                <!--You will need a configured aws-cli in your machine to run this-->
+                <plugin> <!-- builds a runnable jar with main class -->
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                    <executions>
+                        <execution>
+                            <id>ecr-login</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>exec</goal>
+                            </goals>
+                            <configuration>
+                                <!--'rootDirectory' variable is exposed by the directory-maven-plugin-->
+                                <executable>${rootDirectory}/../deployment/scripts/ecr-login.sh
+                                </executable>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--This plugin is responsible for building the docker image in the install phase-->
+                <!--and pushing it to ecr repository in deploy phase. It uses the Dockerfile provided-->
+                <!--alongside the pom in the project. You need to have docker installed to use this-->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>1.4.13</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>javax.activation</groupId>
+                            <artifactId>activation</artifactId>
+                            <version>1.1.1</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>default</id>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>push</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <repository>836079437595.dkr.ecr.us-east-1.amazonaws.com/platform-services
+                        </repository>
+                        <tag>${project.artifactId}-${release.tag}${build.number}</tag>
+                        <buildArgs>
+                            <JAR_FILE>
+                                ${project.artifactId}-${project.version}-jar-with-dependencies.jar
+                            </JAR_FILE>
+                        </buildArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.38.0</version>
+                </plugin>
+                <!--We are not using the maven deploy plugin in favour of nexus-staging-maven-plugin to support pushing snapshot deps to nexus-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <!--This plugin will get the root directory of project and expose it in the variable 'rootDirectory'-->
+            <plugin>
+                <groupId>org.commonjava.maven.plugins</groupId>
+                <artifactId>directory-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>directories</id>
+                        <goals>
+                            <goal>directory-of</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <property>rootDirectory</property>
+                            <project>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                            </project>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${basedir}/src/main</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <argLine>${surefireArgLine}</argLine>
+                    <systemPropertyVariables>
+                        <karate.env>${environment}</karate.env>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin> <!-- builds a runnable jar with main class -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>jar-with-dependencies</classifier>
+                            <mainClass>${main.class}</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--This plugin is responsible for building the docker image in the install phase-->
+            <!--and pushing it to ecr repository in deploy phase. It uses the Dockerfile provided-->
+            <!--alongside the pom in the project. You need to have docker installed to use this-->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>coverage</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.7</version>
+                        <executions>
+                            <!-- Prepares the property pointing to the JaCoCo runtime agent which
+                                is passed as VM argument when Maven the Surefire plugin is executed. -->
+
+
+                            <execution>
+                                <id>pre-integration-test</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Sets the path to the file which contains the execution data. -->
+                                    <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+                                    <!-- Sets the name of the property containing the settings for JaCoCo
+                                        runtime agent. -->
+                                    <propertyName>failsafeArgLine</propertyName>
+                                    <skip>${skip.dump}</skip>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>post-integration-test</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>dump</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Sets the path to the file which contains the execution data. -->
+                                    <destFile>${project.build.directory}/jacoco-it-${app.host}-${app.port}.exec</destFile>
+                                    <address>${app.host}</address>
+                                    <port>${app.port}</port>
+                                    <skip>${skip.dump}</skip>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>merge-test-data</id>
+                                <goals>
+                                    <goal>merge</goal>
+                                </goals>
+                                <configuration>
+                                    <destFile>target/jacoco-it.exec</destFile>
+                                    <skip>${skip.dump}</skip>
+                                    <fileSets>
+                                        <fileSet implementation="org.apache.maven.shared.model.fileset.FileSet">
+                                            <directory>target</directory>
+                                            <includes>
+                                                <include>*it*.exec</include>
+                                            </includes>
+                                        </fileSet>
+                                    </fileSets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <build.profile.id>coverage</build.profile.id>
+            </properties>
+        </profile>
+    </profiles>
+
+
+</project>
