@@ -1,0 +1,22 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "scheduling-service.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "scheduling-service.name" . }}
+    helm.sh/chart: {{ include "scheduling-service.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta2
+    kind: Deployment
+    name: {{ include "scheduling-service.fullname" . }}
+  minReplicas: {{ default 2 .Values.minReplicas }}
+  maxReplicas: {{ default 2 .Values.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 80
+#  targetCPUUtilizationPercentage: 80

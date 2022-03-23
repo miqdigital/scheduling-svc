@@ -1,0 +1,8 @@
+{
+  "startDateTime": null,
+  "endDateTime": null,
+  "schedule": {
+    "type": "cronExpression",
+    "value": "cron"
+  }
+}

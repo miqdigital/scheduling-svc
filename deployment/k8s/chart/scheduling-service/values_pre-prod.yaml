@@ -1,0 +1,62 @@
+replicaCount: 2
+
+image:
+  repository: 836079437595.dkr.ecr.us-east-1.amazonaws.com/platform-services
+  tag: scheduling-server-1.6.0-SNAPSHOT
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: private-nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  paths:
+    - /
+  hosts:
+    - pre-prod-scheduling.mediaiqdigital.com
+  tls: []
+
+config:
+  environment: pre-prod
+  spring:
+    datasource:
+      url: jdbc:postgresql://techbrew-non-prod.cvb1rjfllvqw.us-east-1.rds.amazonaws.com:5432/scheduling_pre-prod
+      instanceName: QuartzPostgresScheduler_PRE-PROD
+      quartzdatasourcename: quartzDataSource-PRE-PROD
+
+monitoring:
+  annotations:
+    prometheus.io/env: "PRE_PROD"
+
+vault:
+  enabled: true
+  authName: kubernetes
+  roleName: pt-scheduling-pre-prod
+  location: scheduling-service-pre-prod
+  engineName: Platform-Vault-Kubernetes
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/instance
+            operator: In
+            values:
+            - scheduling-service-pre-prod
+        topologyKey: "failure-domain.beta.kubernetes.io/zone"
+
+timestamp: A100

@@ -1,0 +1,1 @@
+Refer [DeveloperHub](https://developerhub.mediaiqdigital.com/portal/apis/)
