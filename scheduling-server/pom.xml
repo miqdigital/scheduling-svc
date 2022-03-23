@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.mediaiq.caps.platform.scheduling</groupId>
         <artifactId>scheduling-service</artifactId>
-        <version>1.12.1</version>
+        <version>1.12.0</version>
     </parent>
 
     <artifactId>scheduling-server</artifactId>
@@ -19,7 +19,6 @@
     <properties>
         <main.class>com.mediaiq.caps.platform.scheduling.SchedulingServerStartUp</main.class>
         <commons-io.version>2.11.0</commons-io.version>
-        <messaging.client.version>2.2.0</messaging.client.version>
         <sonar.coverage.jacoco.xmlReportPaths>
             ${basedir}/../${aggregate.report.dir}
         </sonar.coverage.jacoco.xmlReportPaths>
@@ -44,25 +43,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.mediaiq.caps.platform</groupId>
-            <artifactId>tracking-tags-sdk</artifactId>
-            <version>${tracking-tags.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.mediaiq.caps.platform.scheduling</groupId>
             <artifactId>scheduling-commons</artifactId>
             <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mediaiq.caps.platform.messaging</groupId>
-            <artifactId>messaging-client-java</artifactId>
-            <version>${messaging.client.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.prometheus</groupId>
-                    <artifactId>simpleclient</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!--To handle jsonb type-->
@@ -153,6 +136,11 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
         </dependency>
     </dependencies>
     <dependencyManagement>

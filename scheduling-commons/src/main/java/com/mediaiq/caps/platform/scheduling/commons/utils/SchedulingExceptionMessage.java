@@ -22,8 +22,6 @@ public enum SchedulingExceptionMessage {
 
   SCHEDULE_TASK_IS_NOT_IN_ACTIVE_STATUS(40009, "The Schedule Task isn't in ACTIVE status."),
 
-  INVALID_TRACKING_TAGS_EXPRESSION(40010, "Tracking tags in header is invalid"),
-
   MIN_INTERVAL_CONSTRAINT_VIOLATION(40011,
       "Given scheduling interval is less than min allowed interval"),
 

@@ -30,10 +30,6 @@ public class Executor implements Serializable {
   @Builder.Default
   private HttpConfig httpConfig = null;
 
-  @JsonProperty("messagingConfig")
-  @Builder.Default
-  private MessagingConfig messagingConfig = null;
-
   /**
    * Type of Executor
    *
@@ -78,28 +74,10 @@ public class Executor implements Serializable {
     this.httpConfig = httpConfig;
   }
 
-  /**
-   * Gets messaging config.
-   *
-   * @return the messaging config
-   */
-  public MessagingConfig getMessagingConfig() {
-    return messagingConfig;
-  }
-
-  /**
-   * Sets messaging config.
-   *
-   * @param messagingConfig the messaging config
-   */
-  public void setMessagingConfig(MessagingConfig messagingConfig) {
-    this.messagingConfig = messagingConfig;
-  }
-
   @Override
   public String toString() {
     return "Executor{" + "type=" + type + ", curlConfig=" + curlConfig + ", httpConfig="
-        + httpConfig + ", messagingConfig=" + messagingConfig + '}';
+        + httpConfig + '}';
   }
 
   @Override
@@ -109,15 +87,13 @@ public class Executor implements Serializable {
     if (o == null || getClass() != o.getClass())
       return false;
     Executor executor = (Executor) o;
-    return getType() == executor.getType() && Objects
-        .equals(getCurlConfig(), executor.getCurlConfig()) && Objects
-        .equals(getHttpConfig(), executor.getHttpConfig()) && Objects
-        .equals(getMessagingConfig(), executor.getMessagingConfig());
+    return getType() == executor.getType() && Objects.equals(getCurlConfig(),
+        executor.getCurlConfig()) && Objects.equals(getHttpConfig(), executor.getHttpConfig());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getType(), getCurlConfig(), getHttpConfig(), getMessagingConfig());
+    return Objects.hash(getType(), getCurlConfig(), getHttpConfig());
   }
 
   /**
@@ -137,9 +113,7 @@ public class Executor implements Serializable {
   public enum ExecutorType {
     CURL("curl"),
 
-    HTTP("http"),
-
-    MESSAGING("messaging");
+    HTTP("http");
 
     private String value;
 
@@ -161,5 +135,6 @@ public class Executor implements Serializable {
     @JsonValue
     public String toString() {
       return String.valueOf(value);
-    }}
+    }
+  }
 }

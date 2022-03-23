@@ -34,6 +34,7 @@ public interface SchedulerService {
 
   /**
    * Get the first execution after current time without any misfire
+   *
    * @param scheduledTask ScheduleTask
    * @return ZonedDateTime
    * @throws SchedulerException
@@ -43,6 +44,7 @@ public interface SchedulerService {
 
   /**
    * Get list of execution times
+   *
    * @param trigger trigger for the schedule
    * @param limit number of records to get
    * @return List of execution times
@@ -52,12 +54,13 @@ public interface SchedulerService {
 
   /**
    * Get max 50 list of execution times
+   *
    * @param trigger trigger for the schedule
    * @return list fo execution times
    * @throws ParseException
    */
   default List<ZonedDateTime> getExecutionTimes(Trigger trigger) throws ParseException {
-    return getExecutionTimes(trigger,50);
+    return getExecutionTimes(trigger, 50);
   }
 
 }

@@ -28,23 +28,19 @@ public class SchedulingServerStartUp implements CommandLineRunner {
   @Autowired
   ApplicationConfig applicationConfig;
 
-  public static void main(String[] args) {//NOSONAR
+  public static void main(String[] args) {
     System.setProperty("spring.profiles.default", "local");
     SpringApplication.run(SchedulingServerStartUp.class, args);
   }
 
 
   @Override
-  public void run(String... args) {//NOSONAR
+  public void run(String... args) {
     String[] activeProfiles = environment.getActiveProfiles();
     String[] defaultProfiles = environment.getDefaultProfiles();
     logger.info("Default profile is {}", defaultProfiles[0]);
     if (activeProfiles.length > 0) {
       logger.info("Active profile is {}", activeProfiles[0]);
     }
-    applicationConfig.setSchedulingTrackingTags(applicationConfig.getSchedulingServiceEnv());
-    logger.info("Tracking tags {} for scheduling service env {}",
-        applicationConfig.getSchedulingTrackingTags().toString(),
-        applicationConfig.getSchedulingServiceEnv());
   }
 }

@@ -1,0 +1,36 @@
+.DS_Store
+.classpath
+venv/
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+__pycache__
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+**/.settings/
+**/.idea/
+**/target/
+**/out/
+**/deployment/k8s/chart
+**/build/
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+package-lock.json

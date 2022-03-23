@@ -134,13 +134,13 @@ public class ScheduleTaskExecutionHistory {
       return false;
     }
     ScheduleTaskExecutionHistory scheduleTaskRunResponse = (ScheduleTaskExecutionHistory) o;
-    return Objects.equals(this.executionId, scheduleTaskRunResponse.executionId) && Objects
-        .equals(this.scheduleTaskId, scheduleTaskRunResponse.scheduleTaskId) && Objects
-        .equals(this.scheduleDateTime, scheduleTaskRunResponse.scheduleDateTime) && Objects
-        .equals(this.startDateTime, scheduleTaskRunResponse.startDateTime) && Objects
-        .equals(this.endDateTime, scheduleTaskRunResponse.endDateTime) && Objects
-        .equals(this.executionStatus, scheduleTaskRunResponse.executionStatus) && Objects
-        .equals(this.errorMessage, scheduleTaskRunResponse.errorMessage);
+    return Objects.equals(this.executionId, scheduleTaskRunResponse.executionId) && Objects.equals(
+        this.scheduleTaskId, scheduleTaskRunResponse.scheduleTaskId) && Objects.equals(
+        this.scheduleDateTime, scheduleTaskRunResponse.scheduleDateTime) && Objects.equals(
+        this.startDateTime, scheduleTaskRunResponse.startDateTime) && Objects.equals(
+        this.endDateTime, scheduleTaskRunResponse.endDateTime) && Objects.equals(
+        this.executionStatus, scheduleTaskRunResponse.executionStatus) && Objects.equals(
+        this.errorMessage, scheduleTaskRunResponse.errorMessage);
   }
 
   @Override
