@@ -81,8 +81,9 @@ public class Trigger implements Serializable {
       return false;
     }
     Trigger trigger = (Trigger) o;
-    return Objects.equals(this.startDateTime, trigger.startDateTime) && Objects.equals(
-        this.endDateTime, trigger.endDateTime) && Objects.equals(this.schedule, trigger.schedule);
+    return Objects.equals(this.startDateTime, trigger.startDateTime) && Objects
+        .equals(this.endDateTime, trigger.endDateTime) && Objects
+        .equals(this.schedule, trigger.schedule);
   }
 
   @Override

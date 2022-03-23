@@ -14,6 +14,8 @@ public class ExecutorTest {
   private CurlConfig mockCurlConfig;
   @Mock
   private HttpConfig mockHttpConfig;
+  @Mock
+  private MessagingConfig messagingConfig;
 
   private Executor executorUnderTest;
 
@@ -21,14 +23,14 @@ public class ExecutorTest {
   public void setUp() {
     initMocks(this);
     executorUnderTest =
-        new Executor(Executor.ExecutorType.CURL, mockCurlConfig, mockHttpConfig);
+        new Executor(Executor.ExecutorType.CURL, mockCurlConfig, mockHttpConfig, messagingConfig);
   }
 
   @Test
   public void testEquals() {
     // Setup
     Executor expected =
-        new Executor(Executor.ExecutorType.CURL, mockCurlConfig, mockHttpConfig);
+        new Executor(Executor.ExecutorType.CURL, mockCurlConfig, mockHttpConfig, messagingConfig);
     // Run the test
     final boolean result = executorUnderTest.equals(expected);
     assertTrue(result);
@@ -38,7 +40,7 @@ public class ExecutorTest {
   public void testHashCode() {
     // Setup
     Executor expected =
-        new Executor(Executor.ExecutorType.CURL, mockCurlConfig, mockHttpConfig);
+        new Executor(Executor.ExecutorType.CURL, mockCurlConfig, mockHttpConfig, messagingConfig);
     // Run the test
     assertEquals(expected.hashCode(), executorUnderTest.hashCode());
   }

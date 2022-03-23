@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,6 @@ import com.mediaiq.caps.platform.scheduling.commons.utils.SchedulingExceptionMes
 import com.mediaiq.caps.platform.scheduling.exception.SchedulingException;
 import com.mediaiq.caps.platform.scheduling.service.ScheduleTaskService;
 import com.mediaiq.caps.platform.scheduling.util.Utils;
-
-import io.micrometer.core.instrument.util.StringUtils;
 
 @Controller
 public class ScheduleTaskApiController implements ScheduleTaskApi {
@@ -94,7 +94,7 @@ public class ScheduleTaskApiController implements ScheduleTaskApi {
   @Override
   public ResponseEntity<List<ScheduleTask>> getScheduleTask(String groupId) {
     List<ScheduleTask> scheduleTasks;
-    if (StringUtils.isBlank(groupId)) {
+    if(StringUtils.isBlank(groupId)){
       scheduleTasks = scheduleTaskService.getAll();
     } else {
       scheduleTasks = scheduleTaskService.getAllForGroup(groupId);
@@ -145,9 +145,8 @@ public class ScheduleTaskApiController implements ScheduleTaskApi {
     groupId = groupId != null ? groupId : "";
     scheduleTaskId = scheduleTaskId != null ? scheduleTaskId : "";
     executionStatus = executionStatus != null ? executionStatus : "";
-    List<ScheduleTaskExecutionHistoryResponse> executionHistory =
-        scheduleTaskService.getExecutionHistory(groupId, scheduleTaskId, startDateTime, endDateTime,
-            executionStatus);
+    List<ScheduleTaskExecutionHistoryResponse> executionHistory = scheduleTaskService
+        .getExecutionHistory(groupId, scheduleTaskId, startDateTime, endDateTime, executionStatus);
     return new ResponseEntity<>(executionHistory, HttpStatus.OK);
   }
 

@@ -24,9 +24,11 @@ public class Constants {
   public static final String HTTP_HEADER_SCHEDULE_TASK_SCHEDULED_TIME =
       "schedule-task-scheduled-time";
 
-  public static final String HTTP_HEADER_SCHEDULE_TASK_IS_LAST_RUN = "schedule-task-is-last-run";
+  public static final String HTTP_HEADER_SCHEDULE_TASK_IS_LAST_RUN =
+      "schedule-task-is-last-run";
 
-  public static final String HTTP_HEADER_INSTANCE_HEADER = "internal_instance";
+  public static final String HTTP_HEADER_INSTANCE_HEADER =
+      "internal_instance";
 
   public static final String JOB_RUN_WITH_EXECUTE_NOW = "job-run-with-execute-now";
 

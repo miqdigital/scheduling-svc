@@ -26,6 +26,8 @@ public class SchedulingExceptionMessageTest {
         SchedulingExceptionMessage.SCHEDULE_TASK_IS_IN_ACTIVE_STATUS.toString();
     final String schedule_task_is_not_in_active_statusResult =
         SchedulingExceptionMessage.SCHEDULE_TASK_IS_NOT_IN_ACTIVE_STATUS.toString();
+    final String invalid_tracking_tags_expressionResult =
+        SchedulingExceptionMessage.INVALID_TRACKING_TAGS_EXPRESSION.toString();
     final String min_interval_constraint_violationResult =
         SchedulingExceptionMessage.MIN_INTERVAL_CONSTRAINT_VIOLATION.toString();
     final String start_time_in_back_dateResult =
@@ -51,6 +53,7 @@ public class SchedulingExceptionMessageTest {
     assertEquals("40007", schedule_task_is_not_scheduledResult);
     assertEquals("40008", schedule_task_is_in_active_statusResult);
     assertEquals("40009", schedule_task_is_not_in_active_statusResult);
+    assertEquals("40010", invalid_tracking_tags_expressionResult);
     assertEquals("40011", min_interval_constraint_violationResult);
     assertEquals("40012", start_time_in_back_dateResult);
     assertEquals("40013", end_time_start_time_diff_violationResult);
@@ -80,6 +83,8 @@ public class SchedulingExceptionMessageTest {
         SchedulingExceptionMessage.valueOf(40008));
     assertEquals(SchedulingExceptionMessage.SCHEDULE_TASK_IS_NOT_IN_ACTIVE_STATUS,
         SchedulingExceptionMessage.valueOf(40009));
+    assertEquals(SchedulingExceptionMessage.INVALID_TRACKING_TAGS_EXPRESSION,
+        SchedulingExceptionMessage.valueOf(40010));
     assertEquals(SchedulingExceptionMessage.MIN_INTERVAL_CONSTRAINT_VIOLATION,
         SchedulingExceptionMessage.valueOf(40011));
     assertEquals(SchedulingExceptionMessage.START_TIME_IN_BACK_DATE,

@@ -41,12 +41,14 @@ import org.springframework.stereotype.Service;
 import com.mediaiq.caps.platform.scheduling.commons.model.CurlConfig;
 import com.mediaiq.caps.platform.scheduling.commons.model.Executor;
 import com.mediaiq.caps.platform.scheduling.commons.model.HttpConfig;
+import com.mediaiq.caps.platform.scheduling.commons.model.MessagingConfig;
 import com.mediaiq.caps.platform.scheduling.commons.model.Schedule;
 import com.mediaiq.caps.platform.scheduling.commons.model.ScheduleTask;
 import com.mediaiq.caps.platform.scheduling.commons.model.Trigger;
 import com.mediaiq.caps.platform.scheduling.commons.utils.SchedulingExceptionMessage;
 import com.mediaiq.caps.platform.scheduling.exception.SchedulingException;
 import com.mediaiq.caps.platform.scheduling.jobs.HttpJob;
+import com.mediaiq.caps.platform.scheduling.jobs.MessagingJob;
 import com.mediaiq.caps.platform.scheduling.service.SchedulerService;
 
 @Service
@@ -85,10 +87,9 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     //throw exception if job doesn't already exist
     JobDetail jobDetail = scheduler.getJobDetail(jobKey);
-    if (jobDetail == null) {
-      logger.error("No Job exists for group {} and id {} in quartz", jobGroup, jobId);
-      throw new SchedulingException.NotFoundException(
-          SchedulingExceptionMessage.SCHEDULE_TASK_ID_DOES_NOT_EXIST);
+    if(jobDetail == null){
+      logger.error("No Job exists for group {} and id {} in quartz",jobGroup,jobId);
+      throw new SchedulingException.NotFoundException(SchedulingExceptionMessage.SCHEDULE_TASK_ID_DOES_NOT_EXIST);
     }
     JobDetail jobDetailupdated = createJobDetail(scheduleTask);
     //keep replace as true to replace existing Job
@@ -127,8 +128,8 @@ public class SchedulerServiceImpl implements SchedulerService {
     JobKey jobKey = new JobKey(jobId, jobGroup);
     Scheduler scheduler = schedulerFactory.getScheduler();
     JobDataMap jobDataMap = new JobDataMap();
-    jobDataMap.putAsString(JOB_RUN_WITH_EXECUTE_NOW, true);
-    scheduler.triggerJob(jobKey, jobDataMap);
+    jobDataMap.putAsString(JOB_RUN_WITH_EXECUTE_NOW,true);
+    scheduler.triggerJob(jobKey,jobDataMap);
   }
 
   public ZonedDateTime getLastExecution(ScheduleTask scheduleTask) throws SchedulerException {
@@ -219,6 +220,17 @@ public class SchedulerServiceImpl implements SchedulerService {
         }
         jobDetail.getJobDataMap().put(jobClass.getName(), httpConfig);
         break;
+      case MESSAGING:
+        jobClass = MessagingJob.class;
+        jobDetail =
+            JobBuilder.newJob(jobClass).withIdentity(jobId, jobGroup).storeDurably().build();
+        MessagingConfig messagingConfig = executor.getMessagingConfig();
+        if (messagingConfig == null) {
+          throw new SchedulingException.BadRequestException(
+              SchedulingExceptionMessage.MISSING_CONFIG);
+        }
+        jobDetail.getJobDataMap().put(jobClass.getName(), messagingConfig);
+        break;
       default:
         throw new SchedulingException.BadRequestException(
             SchedulingExceptionMessage.INVALID_EXECUTOR_TYPE);
@@ -283,7 +295,8 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     return TriggerBuilder.newTrigger().withIdentity(triggerKey)
         .startAt(Date.from(startDateTime.toInstant())).endAt(Date.from(endDateTime.toInstant()))
-        .withSchedule(scheduleBuilder).forJob(jobDetail).build();
+        .withSchedule(scheduleBuilder)
+        .forJob(jobDetail).build();
   }
 
   private org.quartz.Trigger getSimpleTrigger(TriggerKey triggerKey, int intervalinMin,
@@ -291,10 +304,13 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     ScheduleBuilder<SimpleTrigger> schedBuilder =
         SimpleScheduleBuilder.simpleSchedule().withIntervalInMinutes(intervalinMin)
-            .withMisfireHandlingInstructionFireNow().repeatForever();
+            .withMisfireHandlingInstructionFireNow()
+            .repeatForever();
     return TriggerBuilder.newTrigger().withIdentity(triggerKey)
         .startAt(Date.from(startDateTime.toInstant())).endAt(Date.from(endDateTime.toInstant()))
-        .withSchedule(schedBuilder).forJob(jobDetail).build();
+        .withSchedule(schedBuilder)
+        .forJob(jobDetail)
+        .build();
   }
 
   private org.quartz.Trigger getCronTrigger(TriggerKey triggerKey, String cronExpression,
@@ -357,8 +373,7 @@ public class SchedulerServiceImpl implements SchedulerService {
       List<ZonedDateTime> executionTimes = getExecutionTimes(scheduledTaskTrigger, executionLimit);
       int sizeOfExecution = executionTimes.size();
 
-      while (sizeOfExecution > 1 && !executionTimes.get(sizeOfExecution - 1)
-          .isAfter(baseStartTime)) {
+      while (sizeOfExecution > 1 && !executionTimes.get(sizeOfExecution-1).isAfter(baseStartTime)) {
         Trigger trigger = Trigger.builder().startDateTime(executionTimes.get(sizeOfExecution - 1))
             .endDateTime(scheduledTaskTrigger.getEndDateTime())
             .schedule(scheduledTaskTrigger.getSchedule()).build();
@@ -431,7 +446,7 @@ public class SchedulerServiceImpl implements SchedulerService {
   }
 
   private List<ZonedDateTime> getExecutionTimesForCalendarTrigger(ZonedDateTime stTime,
-      ZonedDateTime endTime, ZoneId zoneId, int intervalInMonths, int limit) {
+      ZonedDateTime endTime,ZoneId zoneId, int intervalInMonths, int limit) {
     List<Date> executionTimes = new ArrayList<>();
     CalendarIntervalTriggerImpl calendarIntervalTrigger = new CalendarIntervalTriggerImpl();
     calendarIntervalTrigger.setStartTime(Date.from(stTime.toInstant()));
@@ -461,7 +476,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     CronExpression cron = new CronExpression(cronExpression);
     TimeZone timeZone = TimeZone.getTimeZone(zone);
     cron.setTimeZone(timeZone);
-    if (cron.isSatisfiedBy(startDateTime)) {
+    if(cron.isSatisfiedBy(startDateTime)) {
       executionTimes.add(startDateTime);
     }
     Date next = cron.getNextValidTimeAfter(startDateTime);

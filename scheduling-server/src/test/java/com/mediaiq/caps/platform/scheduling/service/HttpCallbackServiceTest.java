@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 
 import com.mediaiq.caps.platform.scheduling.config.ApplicationConfig;
 import com.mediaiq.caps.platform.scheduling.util.Constants;
-
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import okhttp3.Call;

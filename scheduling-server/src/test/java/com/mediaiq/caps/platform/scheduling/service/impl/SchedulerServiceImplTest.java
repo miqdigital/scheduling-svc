@@ -27,6 +27,7 @@ import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
@@ -97,14 +98,13 @@ public class SchedulerServiceImplTest {
     schedulerServiceImplUnderTest.delete(simpleScheduleTask);
 
     // Verify the results
-    verify(mockScheduler, times(2)).deleteJob(any(JobKey.class));
-    verify(mockScheduler, times(2)).unscheduleJob(any(TriggerKey.class));
+    verify(mockScheduler,times(2)).deleteJob(any(JobKey.class));
+    verify(mockScheduler,times(2)).unscheduleJob(any(TriggerKey.class));
   }
 
   @Test(expected = SchedulerException.class)
   public void testDelete_ThrowsSchedulerException() throws Exception {
-    //    doThrow(SchedulerException.class).when(mockScheduler).unscheduleJob(any(TriggerKey.class));
-    when(mockScheduler.unscheduleJob(any(TriggerKey.class))).thenThrow(SchedulerException.class);
+    doThrow(new SchedulerException()).when(mockScheduler).unscheduleJob(any(TriggerKey.class));
     // Run the test
     schedulerServiceImplUnderTest.delete(cronScheduleTask);
   }
@@ -122,7 +122,7 @@ public class SchedulerServiceImplTest {
     schedulerServiceImplUnderTest.updateJob(simpleScheduleTask);
 
     // Verify the results
-    verify(mockScheduler, times(2)).addJob(any(JobDetail.class), anyBoolean());
+    verify(mockScheduler,times(2)).addJob(any(JobDetail.class), anyBoolean());
   }
 
   @Test(expected = SchedulingException.class)
@@ -138,7 +138,8 @@ public class SchedulerServiceImplTest {
     // Setup
     final com.mediaiq.caps.platform.scheduling.commons.model.Trigger trigger =
         new com.mediaiq.caps.platform.scheduling.commons.model.Trigger(
-            ZonedDateTime.now().minusDays(10), ZonedDateTime.now().plusDays(10),
+            ZonedDateTime.now().minusDays(10),
+            ZonedDateTime.now().plusDays(10),
             new Schedule(Schedule.ScheduleType.EVERY_N_MINUTES, "1440"));
 
     // Run the test
@@ -168,7 +169,7 @@ public class SchedulerServiceImplTest {
         com.mediaiq.caps.platform.scheduling.commons.model.Trigger.builder()
             .startDateTime(ZonedDateTime.now().minusDays(10))
             .endDateTime(ZonedDateTime.now().plusMinutes(20)).schedule(
-                Schedule.builder().type(Schedule.ScheduleType.EVERY_N_MINUTES).value("10").build())
+            Schedule.builder().type(Schedule.ScheduleType.EVERY_N_MINUTES).value("10").build())
             .build();
 
     final ScheduleTask scheduledTask = new ScheduleTask();
@@ -176,11 +177,11 @@ public class SchedulerServiceImplTest {
 
     // Run the test
     ZonedDateTime now = ZonedDateTime.now();
-    final ZonedDateTime result =
-        schedulerServiceImplUnderTest.getFirstValidExecution(scheduledTask, now);
+    final ZonedDateTime result = schedulerServiceImplUnderTest.getFirstValidExecution(scheduledTask,
+        now);
 
     // Verify the results
-    assertEquals(0L, ChronoUnit.MINUTES.between(now, result));
+    assertEquals(0L,ChronoUnit.MINUTES.between(now,result) );
   }
 
   @Test(expected = SchedulerException.class)
@@ -190,7 +191,7 @@ public class SchedulerServiceImplTest {
         com.mediaiq.caps.platform.scheduling.commons.model.Trigger.builder()
             .startDateTime(ZonedDateTime.now().minusDays(10))
             .endDateTime(ZonedDateTime.now().minusMinutes(20)).schedule(
-                Schedule.builder().type(Schedule.ScheduleType.EVERY_N_MINUTES).value("10").build())
+            Schedule.builder().type(Schedule.ScheduleType.EVERY_N_MINUTES).value("10").build())
             .build();
 
     final ScheduleTask scheduledTask = new ScheduleTask();
@@ -198,8 +199,8 @@ public class SchedulerServiceImplTest {
 
     // Run the test
     ZonedDateTime now = ZonedDateTime.now();
-    final ZonedDateTime result =
-        schedulerServiceImplUnderTest.getFirstValidExecution(scheduledTask, now);
+    final ZonedDateTime result = schedulerServiceImplUnderTest.getFirstValidExecution(scheduledTask,
+        now);
   }
 
   @Test
@@ -214,7 +215,7 @@ public class SchedulerServiceImplTest {
     schedulerServiceImplUnderTest.schedule(simpleScheduleTask);
 
     // Verify the results
-    verify(mockScheduler, times(2)).scheduleJob(any(org.quartz.Trigger.class));
+    verify(mockScheduler,times(2)).scheduleJob(any(org.quartz.Trigger.class));
   }
 
   @Test(expected = SchedulerException.class)
@@ -239,7 +240,7 @@ public class SchedulerServiceImplTest {
 
 
     // Verify the results
-    verify(mockScheduler, times(2)).pauseJob(any(JobKey.class));
+    verify(mockScheduler,times(2)).pauseJob(any(JobKey.class));
   }
 
   @Test(expected = SchedulerException.class)
@@ -258,7 +259,7 @@ public class SchedulerServiceImplTest {
     schedulerServiceImplUnderTest.resume(simpleScheduleTask);
 
     // Verify the results
-    verify(mockScheduler, times(2)).resumeJob(any(JobKey.class));
+    verify(mockScheduler,times(2)).resumeJob(any(JobKey.class));
   }
 
   @Test(expected = SchedulerException.class)
@@ -325,7 +326,7 @@ public class SchedulerServiceImplTest {
     schedulerServiceImplUnderTest.getNextExecution(simpleScheduleTask);
 
     // Verify the results
-    verify(trigger, times(2)).getNextFireTime();
+    verify(trigger,times(2)).getNextFireTime();
   }
 
   @Test(expected = SchedulerException.class)
@@ -352,7 +353,7 @@ public class SchedulerServiceImplTest {
     schedulerServiceImplUnderTest.reSchedule(simpleScheduleTask);
 
     // Verify the results
-    verify(mockScheduler, times(2)).rescheduleJob(any(), any());
+    verify(mockScheduler,times(2)).rescheduleJob(any(), any());
   }
 
   @Test(expected = SchedulerException.class)

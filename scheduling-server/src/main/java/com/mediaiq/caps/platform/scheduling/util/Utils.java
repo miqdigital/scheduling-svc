@@ -28,7 +28,7 @@ public class Utils {
    */
   public static void convertScheduleTimezone(ScheduleTask scheduleTask) {
     try {
-      if (scheduleTask.getZoneID() != null) {
+      if(scheduleTask.getZoneID() != null){
         ZoneId zoneId = ZoneId.of(scheduleTask.getZoneID());
         Trigger trigger = scheduleTask.getTrigger();
         //Update the start and end time in the timezone with zone id for which request came
@@ -47,17 +47,16 @@ public class Utils {
 
   /**
    * Generates meta header map for callbacks.
-   *
    * @param jobExecutionContext JobExecutionContext
    * @return Header Map
    */
   public static Map<String, String> getHeaderMap(JobExecutionContext jobExecutionContext) {
     Map<String, String> headersMap = new HashMap<>();
     JobDataMap mergedJobDataMap = jobExecutionContext.getMergedJobDataMap();
-    String startTime =
-        (String) mergedJobDataMap.getOrDefault(Constants.SCHEDULE_TASK_START_TIME_KEY, "none");
-    String scheduledTime =
-        (String) mergedJobDataMap.getOrDefault(Constants.SCHEDULE_TASK_SCHEDULED_TIME_KEY, "none");
+    String startTime = (String) mergedJobDataMap
+        .getOrDefault(Constants.SCHEDULE_TASK_START_TIME_KEY, "none");
+    String scheduledTime = (String) mergedJobDataMap
+        .getOrDefault(Constants.SCHEDULE_TASK_SCHEDULED_TIME_KEY, "none");
 
     headersMap.put(Constants.HTTP_HEADER_SCHEDULE_TASK_ID,
         jobExecutionContext.getJobDetail().getKey().getName());
@@ -66,17 +65,16 @@ public class Utils {
     Date nextFireTime = jobExecutionContext.getNextFireTime();
     headersMap.put(Constants.HTTP_HEADER_SCHEDULE_TASK_IS_LAST_RUN,
         Boolean.toString(isLastRun(jobExecutionContext)));
-    if (nextFireTime != null) {
-      headersMap.put(Constants.HTTP_HEADER_SCHEDULE_TASK_NEXT_RUN_TIME,
-          ZonedDateTime.ofInstant(nextFireTime.toInstant(), ZoneId.systemDefault())
-              .truncatedTo(ChronoUnit.SECONDS).format(isoDateTime));
+    if(nextFireTime != null){
+      headersMap.put(Constants.HTTP_HEADER_SCHEDULE_TASK_NEXT_RUN_TIME, ZonedDateTime
+          .ofInstant(nextFireTime.toInstant(), ZoneId.systemDefault())
+          .truncatedTo(ChronoUnit.SECONDS).format(isoDateTime));
     }
     return headersMap;
   }
 
   /**
    * Checks if the given run is last run or not, only if the execution is scheduled.
-   *
    * @param jobExecutionContext JobExecutionContext
    * @return boolean
    */

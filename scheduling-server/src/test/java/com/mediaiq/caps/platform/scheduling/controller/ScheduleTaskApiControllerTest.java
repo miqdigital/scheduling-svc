@@ -104,7 +104,8 @@ public class ScheduleTaskApiControllerTest {
     when(mockScheduleTaskService.getAll()).thenReturn(Arrays.asList(this.cronScheduleTask));
 
     // Run the test
-    final ResponseEntity<List<ScheduleTask>> result = scheduleTaskApiController.getScheduleTask("");
+    final ResponseEntity<List<ScheduleTask>> result =
+        scheduleTaskApiController.getScheduleTask("");
 
     // Verify the results
     assertEquals(expectedResult, result);
@@ -115,8 +116,7 @@ public class ScheduleTaskApiControllerTest {
     // Setup
     final ResponseEntity<ScheduleTask> expectedResult =
         new ResponseEntity<>(cronScheduleTask, HttpStatus.OK);
-    when(mockScheduleTaskService.get(EntityMocksHelper.scheduleTaskId)).thenReturn(
-        cronScheduleTask);
+    when(mockScheduleTaskService.get(EntityMocksHelper.scheduleTaskId)).thenReturn(cronScheduleTask);
 
     // Run the test
     final ResponseEntity<ScheduleTask> result =
@@ -135,9 +135,8 @@ public class ScheduleTaskApiControllerTest {
     when(mockScheduleTaskService.update(cronScheduleTask)).thenReturn(cronScheduleTask);
 
     // Run the test
-    final ResponseEntity<ScheduleTask> result =
-        scheduleTaskApiController.updateScheduleTask(scheduleTaskReq,
-            EntityMocksHelper.scheduleTaskId);
+    final ResponseEntity<ScheduleTask> result = scheduleTaskApiController
+        .updateScheduleTask(scheduleTaskReq, EntityMocksHelper.scheduleTaskId);
 
     // Verify the results
     assertEquals(expectedResult, result);

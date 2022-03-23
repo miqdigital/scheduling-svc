@@ -1,5 +1,6 @@
 package com.mediaiq.caps.platform.scheduling.jobs;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.quartz.DisallowConcurrentExecution;
@@ -16,6 +17,7 @@ import com.mediaiq.caps.platform.scheduling.config.ApplicationConfig;
 import com.mediaiq.caps.platform.scheduling.service.HttpCallbackService;
 import com.mediaiq.caps.platform.scheduling.util.QuartzJob;
 import com.mediaiq.caps.platform.scheduling.util.Utils;
+import com.mediaiq.caps.platform.trackingtags.TrackingTags;
 
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -59,9 +61,25 @@ public class HttpJob implements Job {
     headersMap.putAll(Utils.getHeaderMap(jobExecutionContext));
 
     //Populate trackingtags header if endpoint is of api gateway
+    Map<String, String> apiGatewayHeaders = getAPIGatewayHeaders(httpConfig.getUrl());
+    headersMap.putAll(apiGatewayHeaders);
+
     Request request = new Request.Builder().url(httpConfig.getUrl()).headers(Headers.of(headersMap))
         .method(httpConfig.getMethod().toString(), requestBody).build();
-    httpCallbackService.executeHttpCall(request, jobExecutionContext);
+    httpCallbackService.executeHttpCall(request,jobExecutionContext);
     logger.info("Http Job execution completed for name: {} and group: {}", jobName, jobGroup);
   }
+
+  private Map<String, String> getAPIGatewayHeaders(String url) {
+    var headersMap = new HashMap<String,String>();
+    if(url.contains("api-gateway") && url.contains("digital.com")){
+      var apiGatewayToken = applicationConfig.getApiGatewayToken();
+      TrackingTags schedulingTrackingTags = applicationConfig.getSchedulingTrackingTags();
+      Map<String, String> trackingHeaders = schedulingTrackingTags.generateHeaders();
+      trackingHeaders.put("api-gateway-token", apiGatewayToken);
+      headersMap.putAll(trackingHeaders);
+    }
+    return headersMap;
+  }
+
 }

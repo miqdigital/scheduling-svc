@@ -70,8 +70,8 @@ public class HttpConfigBody implements Serializable {
       return false;
     }
     HttpConfigBody httpConfigBody = (HttpConfigBody) o;
-    return Objects.equals(this.contentType, httpConfigBody.contentType) && Objects.equals(
-        this.content, httpConfigBody.content);
+    return Objects.equals(this.contentType, httpConfigBody.contentType) && Objects
+        .equals(this.content, httpConfigBody.content);
   }
 
   @Override

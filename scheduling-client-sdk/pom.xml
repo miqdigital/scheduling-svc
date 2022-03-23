@@ -8,7 +8,7 @@
     <parent>
         <artifactId>scheduling-service</artifactId>
         <groupId>com.mediaiq.caps.platform.scheduling</groupId>
-        <version>1.12.0</version>
+        <version>1.12.1</version>
     </parent>
 
     <artifactId>scheduling-client-sdk</artifactId>
@@ -21,6 +21,7 @@
         <jackson.jsr.version>2.13.0</jackson.jsr.version>
         <junit.version>4.13.2</junit.version>
         <maven.assembly.version>3.3.0</maven.assembly.version>
+        <tracking.tags.sdk.version>1.0.0</tracking.tags.sdk.version>
         <lombok.version>1.18.22</lombok.version>
         <spring-test.version>5.3.14</spring-test.version>
         <jdk.version>1.8</jdk.version>
@@ -51,6 +52,11 @@
             <version>${retrofit.jackson.convertor.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.mediaiq.caps.platform</groupId>
+            <artifactId>tracking-tags</artifactId>
+            <version>${tracking.tags.sdk.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.jsr.version}</version>
@@ -67,18 +73,6 @@
             <artifactId>spring-test</artifactId>
             <version>${spring-test.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <optional>false</optional>
         </dependency>
     </dependencies>
     <profiles>

@@ -7,7 +7,7 @@ import com.mediaiq.caps.platform.scheduling.client.model.SchedulingExceptionResp
  */
 public class SchedulingClientException extends Exception {
 
-  private transient SchedulingExceptionResponse response; 
+  private transient SchedulingExceptionResponse response; //NOSONAR
 
   /**
    * Instantiates a new Scheduling exception.

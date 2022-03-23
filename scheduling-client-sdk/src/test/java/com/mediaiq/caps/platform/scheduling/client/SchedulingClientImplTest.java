@@ -24,6 +24,7 @@ import com.mediaiq.caps.platform.scheduling.client.exception.SchedulingClientExc
 import com.mediaiq.caps.platform.scheduling.client.model.ScheduleTask;
 import com.mediaiq.caps.platform.scheduling.client.model.Trigger;
 import com.mediaiq.caps.platform.scheduling.client.service.SchedulingRest;
+import com.mediaiq.caps.platform.trackingtags.TrackingTags;
 
 import okhttp3.Protocol;
 import okhttp3.ResponseBody;
@@ -41,6 +42,8 @@ public class SchedulingClientImplTest {
   ArgumentCaptor<Trigger> triggerArgumentCaptor;
   @Captor
   ArgumentCaptor<List> listArgumentCaptor;
+  @Mock
+  TrackingTags trackingTags;
   @Mock
   SchedulingConfig schedulingConfig;
   @Mock
@@ -63,7 +66,8 @@ public class SchedulingClientImplTest {
   public void shouldCheckIsEmptyInGetScheduleTask() {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     try {
       schedulingClient.getScheduleTask("");
     } catch (Exception e) {
@@ -75,17 +79,20 @@ public class SchedulingClientImplTest {
   public void shouldCheckGetScheduleTask() throws IOException, SchedulingClientException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.getScheduleTask(Mockito.any(String.class))).thenReturn(mockedCall);
+    when(schedulingRest.getScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(String.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenReturn(success(new ScheduleTask(),
         (new okhttp3.Response.Builder()).code(200).message("OK").protocol(Protocol.HTTP_1_1)
             .request((new okhttp3.Request.Builder()).url("http://localhost/").build()).build()));
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     schedulingClient.getScheduleTask("1100");
 
-    verify(schedulingRest).getScheduleTask(stringArgumentCaptor.capture());
+    verify(schedulingRest).getScheduleTask(hashMapArgumentCaptor.capture(),
+        stringArgumentCaptor.capture());
     assertEquals("1100", stringArgumentCaptor.getValue());
   }
 
@@ -93,11 +100,13 @@ public class SchedulingClientImplTest {
   public void shouldCheckIOExceptionInGetScheduleTask() throws IOException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.getScheduleTask(Mockito.any(String.class))).thenReturn(mockedCall);
+    when(schedulingRest.getScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(String.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenThrow(new IOException());
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     try {
       schedulingClient.getScheduleTask("1100");
@@ -111,21 +120,24 @@ public class SchedulingClientImplTest {
       throws IOException, SchedulingClientException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.getScheduleTask(Mockito.any(List.class))).thenReturn(mockedCall);
+    when(schedulingRest.getScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(List.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenReturn(success(new ArrayList<ScheduleTask>(),
         (new okhttp3.Response.Builder()).code(200).message("OK").protocol(Protocol.HTTP_1_1)
             .request((new okhttp3.Request.Builder()).url("http://localhost/").build()).build()));
 
     List<String> scheduleTaskIds = new ArrayList<>();
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
 
     scheduleTaskIds.add("1100");
 
     schedulingClient.getScheduleTask(scheduleTaskIds);
 
-    verify(schedulingRest).getScheduleTask(listArgumentCaptor.capture());
+    verify(schedulingRest).getScheduleTask(hashMapArgumentCaptor.capture(),
+        listArgumentCaptor.capture());
     assertEquals(scheduleTaskIds, listArgumentCaptor.getValue());
   }
 
@@ -133,12 +145,14 @@ public class SchedulingClientImplTest {
   public void shouldCheckIOExceptionInGetScheduleTaskForScheduleTaskIds() throws IOException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.getScheduleTask(Mockito.any(List.class))).thenReturn(mockedCall);
+    when(schedulingRest.getScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(List.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenThrow(new IOException());
 
     List<String> scheduleTaskIds = new ArrayList<>();
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
 
     scheduleTaskIds.add("1100");
@@ -154,17 +168,20 @@ public class SchedulingClientImplTest {
   public void shouldCheckGetAllScheduleTask() throws IOException, SchedulingClientException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.getAllScheduleTask(Mockito.any(String.class))).thenReturn(mockedCall);
+    when(schedulingRest.getAllScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(String.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenReturn(success(new ArrayList<ScheduleTask>(),
         (new okhttp3.Response.Builder()).code(200).message("OK").protocol(Protocol.HTTP_1_1)
             .request((new okhttp3.Request.Builder()).url("http://localhost/").build()).build()));
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     schedulingClient.getAllScheduleTask("1100");
 
-    verify(schedulingRest).getAllScheduleTask(stringArgumentCaptor.capture());
+    verify(schedulingRest).getAllScheduleTask(hashMapArgumentCaptor.capture(),
+        stringArgumentCaptor.capture());
     assertEquals("1100", stringArgumentCaptor.getValue());
   }
 
@@ -172,11 +189,13 @@ public class SchedulingClientImplTest {
   public void shouldCheckIOExceptionInGetAllScheduleTask() throws IOException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.getAllScheduleTask(Mockito.any(String.class))).thenReturn(mockedCall);
+    when(schedulingRest.getAllScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(String.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenThrow(new IOException());
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     try {
       schedulingClient.getAllScheduleTask("1100");
@@ -190,7 +209,8 @@ public class SchedulingClientImplTest {
   public void shouldCheckIsEmptyInUpdateScheduleTask() {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
 
     try {
       schedulingClient.updateScheduleTask(new ScheduleTask());
@@ -204,7 +224,7 @@ public class SchedulingClientImplTest {
   public void shouldCheckUpdateScheduleTask() throws IOException, SchedulingClientException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.updateScheduleTask(Mockito.any(String.class),
+    when(schedulingRest.updateScheduleTask(Mockito.any(HashMap.class), Mockito.any(String.class),
         Mockito.any(ScheduleTask.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenReturn(success(new ScheduleTask(),
@@ -213,13 +233,14 @@ public class SchedulingClientImplTest {
 
     when(scheduleTask.getId()).thenReturn("1100");
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
 
     schedulingClient.updateScheduleTask(scheduleTask);
 
-    verify(schedulingRest).updateScheduleTask(stringArgumentCaptor.capture(),
-        scheduleTaskArgumentCaptor.capture());
+    verify(schedulingRest).updateScheduleTask(hashMapArgumentCaptor.capture(),
+        stringArgumentCaptor.capture(), scheduleTaskArgumentCaptor.capture());
     assertEquals(scheduleTask, scheduleTaskArgumentCaptor.getValue());
   }
 
@@ -227,14 +248,15 @@ public class SchedulingClientImplTest {
   public void shouldCheckIOExceptionInUpdateScheduleTask() throws IOException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.updateScheduleTask(Mockito.any(String.class),
+    when(schedulingRest.updateScheduleTask(Mockito.any(HashMap.class), Mockito.any(String.class),
         Mockito.any(ScheduleTask.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenThrow(new IOException());
 
     when(scheduleTask.getId()).thenReturn("1100");
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     try {
       schedulingClient.updateScheduleTask(scheduleTask);
@@ -249,18 +271,21 @@ public class SchedulingClientImplTest {
   public void shouldCheckCreateScheduleTask() throws IOException, SchedulingClientException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.createScheduleTask(Mockito.any(ScheduleTask.class))).thenReturn(mockedCall);
+    when(schedulingRest.createScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(ScheduleTask.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenReturn(success(new ScheduleTask(),
         (new okhttp3.Response.Builder()).code(200).message("OK").protocol(Protocol.HTTP_1_1)
             .request((new okhttp3.Request.Builder()).url("http://localhost/").build()).build()));
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
 
     schedulingClient.createScheduleTask(scheduleTask);
 
-    verify(schedulingRest).createScheduleTask(scheduleTaskArgumentCaptor.capture());
+    verify(schedulingRest).createScheduleTask(hashMapArgumentCaptor.capture(),
+        scheduleTaskArgumentCaptor.capture());
     assertEquals(scheduleTask, scheduleTaskArgumentCaptor.getValue());
   }
 
@@ -268,11 +293,13 @@ public class SchedulingClientImplTest {
   public void shouldCheckIOExceptionInCreateScheduleTask() throws IOException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.createScheduleTask(Mockito.any(ScheduleTask.class))).thenReturn(mockedCall);
+    when(schedulingRest.createScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(ScheduleTask.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenThrow(new IOException());
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     try {
       schedulingClient.createScheduleTask(scheduleTask);
@@ -285,19 +312,21 @@ public class SchedulingClientImplTest {
   public void shouldCheckMigrateScheduleTask() throws IOException, SchedulingClientException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.migrateScheduleTask(Mockito.any(ScheduleTask.class))).thenReturn(
-        mockedCall);
+    when(schedulingRest.migrateScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(ScheduleTask.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenReturn(success(new ScheduleTask(),
         (new okhttp3.Response.Builder()).code(200).message("OK").protocol(Protocol.HTTP_1_1)
             .request((new okhttp3.Request.Builder()).url("http://localhost/").build()).build()));
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
 
     schedulingClient.migrateScheduleTask(scheduleTask);
 
-    verify(schedulingRest).migrateScheduleTask(scheduleTaskArgumentCaptor.capture());
+    verify(schedulingRest).migrateScheduleTask(hashMapArgumentCaptor.capture(),
+        scheduleTaskArgumentCaptor.capture());
     assertEquals(scheduleTask, scheduleTaskArgumentCaptor.getValue());
   }
 
@@ -305,12 +334,13 @@ public class SchedulingClientImplTest {
   public void shouldCheckIOExceptionInMigrateScheduleTask() throws IOException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.migrateScheduleTask(Mockito.any(ScheduleTask.class))).thenReturn(
-        mockedCall);
+    when(schedulingRest.migrateScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(ScheduleTask.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenThrow(new IOException());
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     try {
       schedulingClient.migrateScheduleTask(scheduleTask);
@@ -323,7 +353,8 @@ public class SchedulingClientImplTest {
   public void shouldCheckIsEmptyInDeleteScheduleTask() {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
 
     try {
       schedulingClient.deleteScheduleTask("");
@@ -336,17 +367,20 @@ public class SchedulingClientImplTest {
   public void shouldCheckDeleteScheduleTask() throws IOException, SchedulingClientException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.deleteScheduleTask(Mockito.any(String.class))).thenReturn(mockedCall);
+    when(schedulingRest.deleteScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(String.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenReturn(success(responseBody,
         (new okhttp3.Response.Builder()).code(200).message("OK").protocol(Protocol.HTTP_1_1)
             .request((new okhttp3.Request.Builder()).url("http://localhost/").build()).build()));
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     schedulingClient.deleteScheduleTask("1100");
 
-    verify(schedulingRest).deleteScheduleTask(stringArgumentCaptor.capture());
+    verify(schedulingRest).deleteScheduleTask(hashMapArgumentCaptor.capture(),
+        stringArgumentCaptor.capture());
     assertEquals("1100", stringArgumentCaptor.getValue());
   }
 
@@ -354,11 +388,13 @@ public class SchedulingClientImplTest {
   public void shouldCheckIOExceptionInDeleteScheduleTask() throws IOException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.deleteScheduleTask(Mockito.any(String.class))).thenReturn(mockedCall);
+    when(schedulingRest.deleteScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(String.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenThrow(new IOException());
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     try {
       schedulingClient.deleteScheduleTask("1100");
@@ -372,7 +408,8 @@ public class SchedulingClientImplTest {
   public void shouldCheckIsEmptyInExecuteScheduleTask() {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     try {
       schedulingClient.executeScheduleTask("");
     } catch (Exception e) {
@@ -384,17 +421,20 @@ public class SchedulingClientImplTest {
   public void shouldCheckExecuteScheduleTask() throws IOException, SchedulingClientException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.executeScheduleTask(Mockito.any(String.class))).thenReturn(mockedCall);
+    when(schedulingRest.executeScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(String.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenReturn(success(responseBody,
         (new okhttp3.Response.Builder()).code(200).message("OK").protocol(Protocol.HTTP_1_1)
             .request((new okhttp3.Request.Builder()).url("http://localhost/").build()).build()));
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     schedulingClient.executeScheduleTask("1100");
 
-    verify(schedulingRest).executeScheduleTask(stringArgumentCaptor.capture());
+    verify(schedulingRest).executeScheduleTask(hashMapArgumentCaptor.capture(),
+        stringArgumentCaptor.capture());
     assertEquals("1100", stringArgumentCaptor.getValue());
   }
 
@@ -402,11 +442,13 @@ public class SchedulingClientImplTest {
   public void shouldCheckIOExceptionInExecuteScheduleTask() throws IOException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.executeScheduleTask(Mockito.any(String.class))).thenReturn(mockedCall);
+    when(schedulingRest.executeScheduleTask(Mockito.any(HashMap.class),
+        Mockito.any(String.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenThrow(new IOException());
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     try {
       schedulingClient.executeScheduleTask("1100");
@@ -421,17 +463,20 @@ public class SchedulingClientImplTest {
   public void shouldCheckGetNextRunsInfo() throws IOException, SchedulingClientException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.getNextRunsInfo(Mockito.any(Trigger.class))).thenReturn(mockedCall);
+    when(schedulingRest.getNextRunsInfo(Mockito.any(HashMap.class),
+        Mockito.any(Trigger.class))).thenReturn(mockedCall);
 
     when(mockedCall.execute()).thenReturn(success(new ArrayList<ZonedDateTime>(),
         (new okhttp3.Response.Builder()).code(200).message("OK").protocol(Protocol.HTTP_1_1)
             .request((new okhttp3.Request.Builder()).url("http://localhost/").build()).build()));
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     schedulingClient.getNextRunsInfo(trigger);
 
-    verify(schedulingRest).getNextRunsInfo(triggerArgumentCaptor.capture());
+    verify(schedulingRest).getNextRunsInfo(hashMapArgumentCaptor.capture(),
+        triggerArgumentCaptor.capture());
 
     assertEquals(trigger, triggerArgumentCaptor.getValue());
   }
@@ -440,10 +485,12 @@ public class SchedulingClientImplTest {
   public void shouldCheckIOExceptionInGetNextRunsInfo() throws IOException {
     when(schedulingConfig.getUrl()).thenReturn("http://localhost:8080");
 
-    when(schedulingRest.getNextRunsInfo(Mockito.any(Trigger.class))).thenReturn(mockedCall);
+    when(schedulingRest.getNextRunsInfo(Mockito.any(HashMap.class),
+        Mockito.any(Trigger.class))).thenReturn(mockedCall);
     when(mockedCall.execute()).thenThrow(new IOException());
 
-    SchedulingClientImpl schedulingClient = new SchedulingClientImpl(schedulingConfig);
+    SchedulingClientImpl schedulingClient =
+        new SchedulingClientImpl(schedulingConfig, trackingTags);
     ReflectionTestUtils.setField(schedulingClient, "schedulingRest", schedulingRest);
     try {
       schedulingClient.getNextRunsInfo(trigger);

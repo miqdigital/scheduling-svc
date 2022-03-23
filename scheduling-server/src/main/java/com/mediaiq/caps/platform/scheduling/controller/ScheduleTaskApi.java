@@ -27,7 +27,7 @@ public interface ScheduleTaskApi {
                   produces = {"application/json", "*/*"},
                   consumes = {"application/json"},
                   method = RequestMethod.GET)
-  ResponseEntity<String> swagger();
+  ResponseEntity<String> swagger();//NOSONAR
 
   @RequestMapping(value = "/schedule-task/migrate",
                   produces = {"application/json", "*/*"},
@@ -36,7 +36,7 @@ public interface ScheduleTaskApi {
   ResponseEntity<ScheduleTask> migrateScheduleTask(@Valid
 
   @RequestBody
-      ScheduleTask body);
+      ScheduleTask body);//NOSONAR
 
   @RequestMapping(value = "/schedule-task",
                   produces = {"application/json", "*/*"},
@@ -44,7 +44,7 @@ public interface ScheduleTaskApi {
                   method = RequestMethod.POST)
   ResponseEntity<ScheduleTask> addScheduleTask(@Valid
   @RequestBody
-      ScheduleTask body);
+      ScheduleTask body);//NOSONAR
 
 
   @RequestMapping(value = "/schedule-task/{scheduleTaskId}",
@@ -88,13 +88,13 @@ public interface ScheduleTaskApi {
 
 
   @RequestMapping(value = "/schedule-task/{scheduleTaskId}",
-                  
+                  //NOSONAR
                   produces = {"application/json", "*/*"},
                   consumes = {"application/json"},
                   method = RequestMethod.PUT)
   ResponseEntity<ScheduleTask> updateScheduleTask(@Valid
   @RequestBody
-      ScheduleTask body,
+      ScheduleTask body,//NOSONAR
       @PathVariable("scheduleTaskId")
           String scheduleTaskId);
 
@@ -124,5 +124,5 @@ public interface ScheduleTaskApi {
                   method = RequestMethod.POST)
   ResponseEntity<List<ZonedDateTime>> getRunsInfo(@Valid
   @RequestBody
-      Trigger trigger);
+      Trigger trigger);//NOSONAR
 }

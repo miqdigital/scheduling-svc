@@ -16,6 +16,10 @@ application:
   schedulingServiceEnv: local
   httpJobCallBackTimeout: 10
   minSchedulingInterval: 5
+  messagingPublishEndpoint: "https://integration-messaging-gateway.dev.miqdigital.com/publish"
+  messagingDefaultPublishTopic: "integration-scheduling-pub"
+  apiGatewayToken: API_GATEWAY_TOKEN
+
 
 #Spring configuration
 spring:

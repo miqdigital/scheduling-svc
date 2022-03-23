@@ -120,5 +120,11 @@ Feature: create, delete, execute now and get features with a valid task
     Then status 204
 
     Examples:
-      | expression |
-      | every3h    |
+      | expression  |
+      | hourly      |
+      | daily       |
+      | weekly      |
+      | fortnightly |
+      | monthly     |
+      | every15m    |
+      | every3h     |

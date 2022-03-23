@@ -37,7 +37,7 @@ public class SchedulingExceptionHandler {
     // make use of application defined status codes for this
     Throwable cause = ex.getCause();
     String message = ex.getMessage() + " Cause : " + cause;
-    if (message.contains("will never fire")) {
+    if(message.contains("will never fire")){
       SchedulingExceptionMessage schedulingExceptionMessage =
           SchedulingExceptionMessage.NEVER_FIRE_SCHEDULE;
       SchedulingExceptionResponse body =
@@ -45,10 +45,10 @@ public class SchedulingExceptionHandler {
               request.getRequestURI());
       return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     } else {
-      SchedulingExceptionResponse body =
-          new SchedulingExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, message,
-              request.getRequestURI(), cause.getClass().getName());
-      return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    SchedulingExceptionResponse body =
+        new SchedulingExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, message,
+            request.getRequestURI(), cause.getClass().getName());
+    return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -69,9 +69,8 @@ public class SchedulingExceptionHandler {
   @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
   public ResponseEntity handleValidationError(HttpServletRequest request, Exception ex) {
     logger.error("Exception ", ex);
-    ResponseStatus responseStatus =
-        AnnotationUtils.findAnnotation(SchedulingException.BadRequestException.class,
-            ResponseStatus.class);
+    ResponseStatus responseStatus = AnnotationUtils
+        .findAnnotation(SchedulingException.BadRequestException.class, ResponseStatus.class);
     HttpStatus status = responseStatus.code();
     StringBuilder validationError = new StringBuilder();
 
@@ -79,8 +78,9 @@ public class SchedulingExceptionHandler {
       BindingResult result = ((MethodArgumentNotValidException) ex).getBindingResult();
       List<FieldError> fieldErrors = result.getFieldErrors();
       for (FieldError fieldError : fieldErrors) {
-        validationError.append("{" + fieldError.getObjectName() + " " + fieldError.getField() + " "
-            + fieldError.getCode() + "},");
+        validationError.append(
+            "{" + fieldError.getObjectName() + " " + fieldError.getField() + " " + fieldError
+                .getCode() + "},");
       }
     } else {
       validationError.append(ex.getCause());

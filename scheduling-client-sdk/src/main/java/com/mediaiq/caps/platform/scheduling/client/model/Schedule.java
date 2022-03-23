@@ -125,8 +125,7 @@ public class Schedule implements Serializable {
     @JsonValue
     public String toString() {
       return String.valueOf(value);
-    }
-  }
+    }}
 
 
   /**
@@ -167,7 +166,6 @@ public class Schedule implements Serializable {
     @JsonValue
     public String toString() {
       return String.valueOf(value);
-    }
-  }
+    }}
 
 }
