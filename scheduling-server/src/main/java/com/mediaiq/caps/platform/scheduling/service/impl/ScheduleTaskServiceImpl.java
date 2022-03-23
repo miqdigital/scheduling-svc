@@ -115,7 +115,7 @@ public class ScheduleTaskServiceImpl implements ScheduleTaskService {
       savedScheduleTask = scheduleTaskRepository.save(scheduleTaskReq);
       schedulerService.create(scheduleTaskReq);
       schedulerService.schedule(scheduleTaskReq);
-      if(scheduleTaskReq.getStatus().equals(ScheduleTask.StatusEnum.INACTIVE)){
+      if (scheduleTaskReq.getStatus().equals(ScheduleTask.StatusEnum.INACTIVE)) {
         schedulerService.pause(scheduleTaskReq);
       }
       setExecutionInfo(savedScheduleTask);
@@ -184,7 +184,7 @@ public class ScheduleTaskServiceImpl implements ScheduleTaskService {
       validateStartEndTimeDiff(scheduleTaskReq);
     }
 
-    if(!scheduleTaskReq.getGroup().equals(currentScheduleTask.getGroup())){
+    if (!scheduleTaskReq.getGroup().equals(currentScheduleTask.getGroup())) {
       logger.warn("Schedule task group cannot be updated {}", scheduleTaskReq);
       throw new SchedulingException.BadRequestException(SCHEDULE_GROUP_UPDATE_ERROR);
     }
@@ -203,8 +203,8 @@ public class ScheduleTaskServiceImpl implements ScheduleTaskService {
       }
 
       //If status is changed , pause/resume job
-      if (scheduleTaskReq.getStatus() != null
-          && !scheduleTaskReq.getStatus().equals(currentScheduleTask.getStatus())) {
+      if (scheduleTaskReq.getStatus() != null && !scheduleTaskReq.getStatus()
+          .equals(currentScheduleTask.getStatus())) {
         if (scheduleTaskReq.getStatus() == ScheduleTask.StatusEnum.ACTIVE) {
           schedulerService.resume(scheduleTaskReq);
           logger.info("Task active {}", scheduleTaskReq.getId());
@@ -271,38 +271,41 @@ public class ScheduleTaskServiceImpl implements ScheduleTaskService {
       if (StringUtils.isEmpty(scheduleTaskId) && StringUtils.isEmpty(groupName)) {
         result = scheduleTaskExecutionHistoryRepository.findAllByStartDateTimeBetween(start, end);
       } else if (StringUtils.isEmpty(scheduleTaskId) == false) {
-        result = scheduleTaskExecutionHistoryRepository
-            .findByIdAndStartDateTimeBetween(scheduleTaskId, start, end);
+        result =
+            scheduleTaskExecutionHistoryRepository.findByIdAndStartDateTimeBetween(scheduleTaskId,
+                start, end);
       } else {
-        result = scheduleTaskExecutionHistoryRepository
-            .findByGroupAndStartDateTimeBetween(groupName, start, end);
+        result =
+            scheduleTaskExecutionHistoryRepository.findByGroupAndStartDateTimeBetween(groupName,
+                start, end);
       }
     } else {
       ExecutionStatusEnum executionStatusEnum;
       try {
-        executionStatusEnum = ExecutionStatusEnum.valueOf(executionStatus.toUpperCase());//NOSONAR
+        executionStatusEnum = ExecutionStatusEnum.valueOf(executionStatus.toUpperCase());
       } catch (IllegalArgumentException exception) {
         logger.error("Error while converting executionStatus {}, exception", executionStatus,
             exception);
         throw new SchedulingException.BadRequestException(INVALID_EXECUTION_STATUS);
       }
       if (StringUtils.isEmpty(scheduleTaskId) && StringUtils.isEmpty(groupName)) {
-        result = scheduleTaskExecutionHistoryRepository
-            .findAllByExecutionStatusAndByStartDateTimeBetween(executionStatus, start, end);
+        result =
+            scheduleTaskExecutionHistoryRepository.findAllByExecutionStatusAndByStartDateTimeBetween(
+                executionStatus, start, end);
       } else if (StringUtils.isEmpty(scheduleTaskId) == false) {
-        result = scheduleTaskExecutionHistoryRepository
-            .findByIdAndExecutionStatusAndStartDateTimeBetween(scheduleTaskId, executionStatus,
-                start, end);
+        result =
+            scheduleTaskExecutionHistoryRepository.findByIdAndExecutionStatusAndStartDateTimeBetween(
+                scheduleTaskId, executionStatus, start, end);
       } else {
-        result = scheduleTaskExecutionHistoryRepository
-            .findByGroupAndExecutionStatusAndStartDateTimeBetween(groupName, executionStatus, start,
-                end);
+        result =
+            scheduleTaskExecutionHistoryRepository.findByGroupAndExecutionStatusAndStartDateTimeBetween(
+                groupName, executionStatus, start, end);
       }
     }
     scheduleTaskExecutionHistoryResponse = new ArrayList<>(result.size());
     for (ScheduleTaskExecutionHistory scheduleTaskExecutionHistory : result) {
-      scheduleTaskExecutionHistoryResponse
-          .add(new ScheduleTaskExecutionHistoryResponse(scheduleTaskExecutionHistory));
+      scheduleTaskExecutionHistoryResponse.add(
+          new ScheduleTaskExecutionHistoryResponse(scheduleTaskExecutionHistory));
     }
 
     return scheduleTaskExecutionHistoryResponse;
@@ -394,9 +397,8 @@ public class ScheduleTaskServiceImpl implements ScheduleTaskService {
       throw new SchedulingException.BadRequestException(INVALID_SCHEDULE_EXPRESSION);
     }
     ZonedDateTime startDateTime = trigger.getStartDateTime();
-    Trigger frequencyTrigger =
-        Trigger.builder().schedule(schedule).startDateTime(startDateTime)
-            .endDateTime(startDateTime.plusYears(Constants.MAX_DIFF_START_END_YEAR)).build();
+    Trigger frequencyTrigger = Trigger.builder().schedule(schedule).startDateTime(startDateTime)
+        .endDateTime(startDateTime.plusYears(Constants.MAX_DIFF_START_END_YEAR)).build();
     int minSchedulingIntervalInMin = applicationConfig.getMinSchedulingInterval();
 
     try {

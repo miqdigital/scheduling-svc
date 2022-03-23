@@ -41,11 +41,6 @@ public class Executor implements Serializable {
   @Builder.Default
   private HttpConfig httpConfig = null;
 
-  @JsonProperty("messagingConfig")
-  @JsonInclude(JsonInclude.Include. NON_NULL)
-  @Builder.Default
-  private MessagingConfig messagingConfig = null;
-
   /**
    * Type of Executor
    *
@@ -105,25 +100,6 @@ public class Executor implements Serializable {
     this.httpConfig = httpConfig;
   }
 
-  /**
-   * Gets messaging config.
-   *
-   * @return the messaging config
-   */
-  @Valid
-  public MessagingConfig getMessagingConfig() {
-    return messagingConfig;
-  }
-
-  /**
-   * Sets messaging config.
-   *
-   * @param messagingConfig the messaging config
-   */
-  public void setMessagingConfig(MessagingConfig messagingConfig) {
-    this.messagingConfig = messagingConfig;
-  }
-
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -133,9 +109,8 @@ public class Executor implements Serializable {
       return false;
     }
     Executor executor = (Executor) o;
-    return Objects.equals(this.type, executor.type) && Objects
-        .equals(this.curlConfig, executor.curlConfig) && Objects
-        .equals(this.httpConfig, executor.httpConfig);
+    return Objects.equals(this.type, executor.type) && Objects.equals(this.curlConfig,
+        executor.curlConfig) && Objects.equals(this.httpConfig, executor.httpConfig);
   }
 
   @Override
@@ -178,12 +153,7 @@ public class Executor implements Serializable {
     /**
      * Http executor type.
      */
-    HTTP("http"),
-
-    /**
-     * Messaging executor type.
-     */
-    MESSAGING("messaging");
+    HTTP("http");
 
     private String value;
 
@@ -211,5 +181,6 @@ public class Executor implements Serializable {
     @JsonValue
     public String toString() {
       return String.valueOf(value);
-    }}
+    }
+  }
 }

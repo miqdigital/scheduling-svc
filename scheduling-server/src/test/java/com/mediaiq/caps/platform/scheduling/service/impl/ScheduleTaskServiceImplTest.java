@@ -103,11 +103,14 @@ public class ScheduleTaskServiceImplTest {
   public void testGet() throws Exception {
     // Setup
     final ScheduleTask expectedResult = cronScheduleTask;
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
 
     // Configure SchedulerService.getLastExecution(...).
-    when(mockSchedulerService.getLastExecution(cronScheduleTask)).thenReturn(any(ZonedDateTime.class));
-    when(mockSchedulerService.getNextExecution(cronScheduleTask)).thenReturn(any(ZonedDateTime.class));
+    when(mockSchedulerService.getLastExecution(cronScheduleTask)).thenReturn(
+        any(ZonedDateTime.class));
+    when(mockSchedulerService.getNextExecution(cronScheduleTask)).thenReturn(
+        any(ZonedDateTime.class));
 
     // Run the test
     final ScheduleTask result = scheduleTaskServiceImplUnderTest.get("scheduleTaskId");
@@ -119,7 +122,8 @@ public class ScheduleTaskServiceImplTest {
   @Test(expected = SchedulingException.class)
   public void testGet_SchedulerServiceGetLastExecutionThrowsSchedulerException() throws Exception {
     // Setup
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
     doThrow(new SchedulerException()).when(mockSchedulerService).getLastExecution(cronScheduleTask);
 
     // Run the test
@@ -129,7 +133,8 @@ public class ScheduleTaskServiceImplTest {
   @Test(expected = SchedulingException.class)
   public void testGet_SchedulerServiceGetNextExecutionThrowsSchedulerException() throws Exception {
     // Setup
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
 
     // Configure SchedulerService.getLastExecution(...).
     when(mockSchedulerService.getLastExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
@@ -223,7 +228,8 @@ public class ScheduleTaskServiceImplTest {
     // Setup
     final ScheduleTask scheduleTaskReq = cronScheduleTask;
     final ScheduleTask expectedResult = cronScheduleTask;
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
     when(mockScheduleTaskRepository.save(cronScheduleTask)).thenReturn(cronScheduleTask);
     when(mockSchedulerService.getLastExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
     when(mockSchedulerService.getNextExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
@@ -242,10 +248,12 @@ public class ScheduleTaskServiceImplTest {
     CurlConfig curlConfig = CurlConfig.builder().curlCommand("anyCommand").build();
     Executor executor =
         Executor.builder().type(Executor.ExecutorType.CURL).curlConfig(curlConfig).build();
-    final ScheduleTask scheduleTaskUpdateJob = cronScheduleTask.toBuilder().executor(executor).build();
+    final ScheduleTask scheduleTaskUpdateJob =
+        cronScheduleTask.toBuilder().executor(executor).build();
     scheduleTaskUpdateJob.setId(EntityMocksHelper.scheduleTaskId);
     final ScheduleTask expectedResult = scheduleTaskUpdateJob;
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
     when(mockScheduleTaskRepository.save(scheduleTaskUpdateJob)).thenReturn(scheduleTaskUpdateJob);
     when(mockSchedulerService.getLastExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
     when(mockSchedulerService.getNextExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
@@ -271,9 +279,10 @@ public class ScheduleTaskServiceImplTest {
 
     scheduleTaskUpdateTrigger.setId(EntityMocksHelper.scheduleTaskId);
     final ScheduleTask expectedResult = scheduleTaskUpdateTrigger;
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
-    when(mockScheduleTaskRepository.save(scheduleTaskUpdateTrigger))
-        .thenReturn(scheduleTaskUpdateTrigger);
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.save(scheduleTaskUpdateTrigger)).thenReturn(
+        scheduleTaskUpdateTrigger);
     when(mockSchedulerService.getLastExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
     when(mockSchedulerService.getNextExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
 
@@ -294,7 +303,8 @@ public class ScheduleTaskServiceImplTest {
 
     scheduleTaskInactive.setId(EntityMocksHelper.scheduleTaskId);
     final ScheduleTask expectedResult = scheduleTaskInactive;
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
     when(mockScheduleTaskRepository.save(scheduleTaskInactive)).thenReturn(scheduleTaskInactive);
     when(mockSchedulerService.getLastExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
     when(mockSchedulerService.getNextExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
@@ -315,9 +325,11 @@ public class ScheduleTaskServiceImplTest {
     CurlConfig curlConfig = CurlConfig.builder().curlCommand("anyCommand").build();
     Executor executor =
         Executor.builder().type(Executor.ExecutorType.CURL).curlConfig(curlConfig).build();
-    final ScheduleTask scheduleTaskUpdateJob = cronScheduleTask.toBuilder().executor(executor).build();
+    final ScheduleTask scheduleTaskUpdateJob =
+        cronScheduleTask.toBuilder().executor(executor).build();
     scheduleTaskUpdateJob.setZoneID("+07:00");
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
     when(mockScheduleTaskRepository.save(scheduleTaskUpdateJob)).thenReturn(scheduleTaskUpdateJob);
     doThrow(SchedulerException.class).when(mockSchedulerService).updateJob(scheduleTaskUpdateJob);
 
@@ -339,8 +351,8 @@ public class ScheduleTaskServiceImplTest {
     scheduleTaskUpdateTrigger.setZoneID("-07:00");
     when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
         Optional.ofNullable(cronScheduleTask));
-    when(mockScheduleTaskRepository.save(scheduleTaskUpdateTrigger))
-        .thenReturn(scheduleTaskUpdateTrigger);
+    when(mockScheduleTaskRepository.save(scheduleTaskUpdateTrigger)).thenReturn(
+        scheduleTaskUpdateTrigger);
     doThrow(SchedulerException.class).when(mockSchedulerService)
         .reSchedule(scheduleTaskUpdateTrigger);
 
@@ -355,8 +367,8 @@ public class ScheduleTaskServiceImplTest {
     final ScheduleTask scheduleTaskActive =
         inactiveScheduleTask.toBuilder().status(ScheduleTask.StatusEnum.ACTIVE).build();
     scheduleTaskActive.setZoneID("-07:00");
-    when(mockScheduleTaskRepository.findById(anyString()))
-        .thenReturn(Optional.of(inactiveScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(inactiveScheduleTask));
     when(mockScheduleTaskRepository.save(scheduleTaskActive)).thenReturn(scheduleTaskActive);
     doThrow(SchedulerException.class).when(mockSchedulerService).resume(scheduleTaskActive);
 
@@ -371,8 +383,8 @@ public class ScheduleTaskServiceImplTest {
     final ScheduleTask scheduleTaskInactive =
         activeScheduleTask.toBuilder().status(ScheduleTask.StatusEnum.INACTIVE).build();
     scheduleTaskInactive.setZoneID("+07:00");
-    when(mockScheduleTaskRepository.findById(anyString()))
-        .thenReturn(Optional.of(activeScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(activeScheduleTask));
     when(mockScheduleTaskRepository.save(scheduleTaskInactive)).thenReturn(scheduleTaskInactive);
     doThrow(SchedulerException.class).when(mockSchedulerService).pause(scheduleTaskInactive);
 
@@ -386,7 +398,8 @@ public class ScheduleTaskServiceImplTest {
     // Setup
     final ScheduleTask scheduleTaskReq = cronScheduleTask;
     final ScheduleTask expectedResult = cronScheduleTask;
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
     when(mockScheduleTaskRepository.save(cronScheduleTask)).thenReturn(cronScheduleTask);
     doThrow(SchedulerException.class).when(mockSchedulerService).getLastExecution(cronScheduleTask);
 
@@ -407,7 +420,8 @@ public class ScheduleTaskServiceImplTest {
     // Setup
     final ScheduleTask scheduleTaskReq = cronScheduleTask;
     final ScheduleTask expectedResult = cronScheduleTask;
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
     when(mockScheduleTaskRepository.save(cronScheduleTask)).thenReturn(cronScheduleTask);
     when(mockSchedulerService.getLastExecution(cronScheduleTask)).thenReturn(ZonedDateTime.now());
     doThrow(SchedulerException.class).when(mockSchedulerService).getNextExecution(cronScheduleTask);
@@ -426,7 +440,8 @@ public class ScheduleTaskServiceImplTest {
   @Test
   public void testDelete() throws Exception {
     // Setup
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
 
     // Run the test
     scheduleTaskServiceImplUnderTest.delete("scheduleTaskId");
@@ -439,7 +454,8 @@ public class ScheduleTaskServiceImplTest {
   @Test(expected = SchedulingException.class)
   public void testDelete_SchedulerServiceThrowsSchedulerException() throws Exception {
     // Setup
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
     doThrow(SchedulerException.class).when(mockSchedulerService).delete(cronScheduleTask);
 
     // Run the test
@@ -452,7 +468,8 @@ public class ScheduleTaskServiceImplTest {
   @Test
   public void testExecuteNow() throws Exception {
     // Setup
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
 
     // Run the test
     scheduleTaskServiceImplUnderTest.executeNow("scheduleTaskId");
@@ -464,7 +481,8 @@ public class ScheduleTaskServiceImplTest {
   @Test(expected = SchedulingException.class)
   public void testExecuteNow_SchedulerServiceThrowsSchedulerException() throws Exception {
     // Setup
-    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(Optional.of(cronScheduleTask));
+    when(mockScheduleTaskRepository.findById(anyString())).thenReturn(
+        Optional.of(cronScheduleTask));
     doThrow(SchedulerException.class).when(mockSchedulerService).executeNow(cronScheduleTask);
 
     // Run the test
@@ -503,7 +521,7 @@ public class ScheduleTaskServiceImplTest {
     List<ZonedDateTime> expected =
         Arrays.asList(zonedDateTime, zonedDateTime.plusMinutes(15), zonedDateTime.plusMinutes(30));
     when(mockApplicationConfig.getMinSchedulingInterval()).thenReturn(10000);
-    when(mockSchedulerService.getExecutionTimes(any(Trigger.class),anyInt())).thenReturn(expected);
+    when(mockSchedulerService.getExecutionTimes(any(Trigger.class), anyInt())).thenReturn(expected);
     // Run the test
     scheduleTaskServiceImplUnderTest.getRunsInfo(trigger);
   }

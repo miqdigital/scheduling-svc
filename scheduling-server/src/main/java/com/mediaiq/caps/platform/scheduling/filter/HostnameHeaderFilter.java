@@ -32,8 +32,8 @@ public class HostnameHeaderFilter extends OncePerRequestFilter {
     try {
       response.addHeader(HTTP_HEADER_INSTANCE_HEADER, HOSTNAME);
     } catch (NullPointerException e) {
-      LOGGER
-          .warn("Exception occurred while adding host header: {}", ExceptionUtils.getStackTrace(e));
+      LOGGER.warn("Exception occurred while adding host header: {}",
+          ExceptionUtils.getStackTrace(e));
     } finally {
       filterChain.doFilter(request, response);
     }

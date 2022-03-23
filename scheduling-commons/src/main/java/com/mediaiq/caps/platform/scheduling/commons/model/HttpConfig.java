@@ -118,9 +118,9 @@ public class HttpConfig implements Serializable {
       return false;
     }
     HttpConfig httpConfig = (HttpConfig) o;
-    return Objects.equals(this.url, httpConfig.url) && Objects
-        .equals(this.method, httpConfig.method) && Objects.equals(this.headers, httpConfig.headers)
-        && Objects.equals(this.body, httpConfig.body);
+    return Objects.equals(this.url, httpConfig.url) && Objects.equals(this.method,
+        httpConfig.method) && Objects.equals(this.headers, httpConfig.headers) && Objects.equals(
+        this.body, httpConfig.body);
   }
 
   @Override
@@ -186,5 +186,6 @@ public class HttpConfig implements Serializable {
     @JsonValue
     public String toString() {
       return String.valueOf(value);
-    }}
+    }
+  }
 }

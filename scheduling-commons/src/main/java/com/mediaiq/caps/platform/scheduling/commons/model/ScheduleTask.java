@@ -2,7 +2,6 @@ package com.mediaiq.caps.platform.scheduling.commons.model;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
-import java.util.TimeZone;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +22,6 @@ import org.hibernate.annotations.TypeDef;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
@@ -331,24 +329,20 @@ public class ScheduleTask {
     }
     ScheduleTask scheduleTask = (ScheduleTask) o;
     return Objects.equals(this.id, scheduleTask.id) && Objects.equals(this.name, scheduleTask.name)
-        && Objects.equals(this.group, scheduleTask.group) && Objects
-        .equals(this.description, scheduleTask.description) && Objects
-        .equals(this.creator, scheduleTask.creator) && Objects
-        .equals(this.status, scheduleTask.status) && Objects
-        .equals(this.created, scheduleTask.created) && Objects
-        .equals(this.updated, scheduleTask.updated) && Objects
-        .equals(this.lastExecution, scheduleTask.lastExecution) && Objects
-        .equals(this.nextExecution, scheduleTask.nextExecution) && Objects
-        .equals(this.trigger, scheduleTask.trigger) && Objects
-        .equals(this.executor, scheduleTask.executor) && Objects
-        .equals(this.zoneID, scheduleTask.zoneID);
+        && Objects.equals(this.group, scheduleTask.group) && Objects.equals(this.description,
+        scheduleTask.description) && Objects.equals(this.creator, scheduleTask.creator)
+        && Objects.equals(this.status, scheduleTask.status) && Objects.equals(this.created,
+        scheduleTask.created) && Objects.equals(this.updated, scheduleTask.updated)
+        && Objects.equals(this.lastExecution, scheduleTask.lastExecution) && Objects.equals(
+        this.nextExecution, scheduleTask.nextExecution) && Objects.equals(this.trigger,
+        scheduleTask.trigger) && Objects.equals(this.executor, scheduleTask.executor)
+        && Objects.equals(this.zoneID, scheduleTask.zoneID);
   }
 
   @Override
   public int hashCode() {
-    return Objects
-        .hash(id, name, group, description, creator, status, created, updated, lastExecution,
-            nextExecution, trigger, executor,zoneID);
+    return Objects.hash(id, name, group, description, creator, status, created, updated,
+        lastExecution, nextExecution, trigger, executor, zoneID);
   }
 
   @Override
@@ -411,5 +405,6 @@ public class ScheduleTask {
     @JsonValue
     public String toString() {
       return String.valueOf(value);
-    }}
+    }
+  }
 }

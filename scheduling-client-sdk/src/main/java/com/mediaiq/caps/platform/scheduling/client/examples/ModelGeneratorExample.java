@@ -31,8 +31,7 @@ public class ModelGeneratorExample {
 
     //Create trigger here
     Schedule schedule =
-        Schedule.builder().type(Schedule.ScheduleType.EVERY_N_MINUTES).value("10")
-            .build();
+        Schedule.builder().type(Schedule.ScheduleType.EVERY_N_MINUTES).value("10").build();
 
     ZonedDateTime start = ZonedDateTime.now().minusDays(10);
     ZonedDateTime end = ZonedDateTime.now().plusMinutes(15);

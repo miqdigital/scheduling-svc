@@ -127,6 +127,6 @@ public class ScheduledTaskExecutionHistoryPlugin
 
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    this.applicationContext = applicationContext;//NOSONAR
+    this.applicationContext = applicationContext;
   }
 }

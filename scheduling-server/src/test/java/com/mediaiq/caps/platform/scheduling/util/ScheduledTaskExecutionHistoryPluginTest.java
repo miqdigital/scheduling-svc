@@ -96,13 +96,13 @@ public class ScheduledTaskExecutionHistoryPluginTest {
 
     when(context.getJobDetail()).thenReturn(jobDetail);
     when(context.getMergedJobDataMap()).thenReturn(jobDataMap);
-    when(applicationContext.getBean(ScheduleTaskExecutionHistoryRepository.class))
-        .thenReturn(mockScheduleTaskExecutionHistoryRepository);
+    when(applicationContext.getBean(ScheduleTaskExecutionHistoryRepository.class)).thenReturn(
+        mockScheduleTaskExecutionHistoryRepository);
     // Run the test
     scheduledTaskExecutionHistoryPluginUnderTest.jobWasExecuted(context, jobException);
 
     // Verify the results
-    verify(mockScheduleTaskExecutionHistoryRepository)
-        .save(any(ScheduleTaskExecutionHistory.class));
+    verify(mockScheduleTaskExecutionHistoryRepository).save(
+        any(ScheduleTaskExecutionHistory.class));
   }
 }

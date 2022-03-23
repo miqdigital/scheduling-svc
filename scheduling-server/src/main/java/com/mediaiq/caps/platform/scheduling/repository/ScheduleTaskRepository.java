@@ -29,8 +29,7 @@ public interface ScheduleTaskRepository extends JpaRepository<ScheduleTask, Stri
          nativeQuery = true)
   ScheduleTask findByNameAndGroup(String name, String group);
 
-  @Query(value = "select * from SCHEDULE_TASK_INFO st where "
-      + "st.groupname like ?1",
+  @Query(value = "select * from SCHEDULE_TASK_INFO st where " + "st.groupname like ?1",
          nativeQuery = true)
   List<ScheduleTask> findByGroup(String group);
 }

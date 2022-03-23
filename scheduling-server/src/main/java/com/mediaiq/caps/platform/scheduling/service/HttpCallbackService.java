@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.mediaiq.caps.platform.scheduling.config.ApplicationConfig;
 import com.mediaiq.caps.platform.scheduling.util.Constants;
+
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -51,8 +52,8 @@ public class HttpCallbackService {
   @Autowired
   public HttpCallbackService(ApplicationConfig applicationConfig, MeterRegistry meterRegistry) {
     this.meterRegistry = meterRegistry;
-    client = new OkHttpClient.Builder()
-        .eventListener(OkHttpMetricsEventListener.builder(meterRegistry, "okhttp.requests").build())
+    client = new OkHttpClient.Builder().eventListener(
+            OkHttpMetricsEventListener.builder(meterRegistry, "okhttp.requests").build())
         .callTimeout(applicationConfig.getHttpJobCallBackTimeout(), TimeUnit.SECONDS).build();
     runCounter = Counter.builder("runCounter").description("count success/failure job runs");
     delayTimer = Timer.builder("delayTimer").description("count delay of job runs")
@@ -73,6 +74,10 @@ public class HttpCallbackService {
    */
   public OkHttpClient getClient() {
     return client;
+  }
+
+  public void setClient(OkHttpClient client) {
+    this.client = client;
   }
 
   /**
@@ -130,8 +135,7 @@ public class HttpCallbackService {
     if (isSuccess == false) {
       String code = response != null ? String.valueOf(response.code()) : "";
       String message = response != null ? response.message() : "";
-      runCounter.tags(group, jobGroup, "status", "failure").register(meterRegistry)
-          .increment(1.0);
+      runCounter.tags(group, jobGroup, "status", "failure").register(meterRegistry).increment(1.0);
       if (httpStatus == null) {
         throw new JobExecutionException("Unknown http status code observed " + code);
       } else {
@@ -140,13 +144,8 @@ public class HttpCallbackService {
                 + " ,response: " + message);
       }
     } else {
-      runCounter.tags(group, jobGroup, "status", "success").register(meterRegistry)
-          .increment(1.0);
+      runCounter.tags(group, jobGroup, "status", "success").register(meterRegistry).increment(1.0);
     }
 
-  }
-
-  public void setClient(OkHttpClient client) {
-    this.client = client;
   }
 }

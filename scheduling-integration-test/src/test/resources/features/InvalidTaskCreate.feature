@@ -46,7 +46,7 @@ Feature: test correct error message for invalid task creation
     When method post
     Then status 400
     And match $ contains any { error: "Bad Request", message: "{scheduleTask description NotNull}," }
-  
+
   Scenario: Description given as an empty string
     * def task = read('classpath:tasks/simpleTask.json')
     * set task.description = ""

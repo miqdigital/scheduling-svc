@@ -5,7 +5,7 @@
     <parent>
         <artifactId>scheduling-service</artifactId>
         <groupId>com.mediaiq.caps.platform.scheduling</groupId>
-        <version>1.12.1</version>
+        <version>1.12.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -26,17 +26,6 @@
             <groupId>com.intuit.karate</groupId>
             <artifactId>karate-junit4</artifactId>
             <version>${karate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.miq.automation.framework</groupId>
-            <artifactId>miq-automation-common-framework</artifactId>
-            <version>${miq-automation-common-framework.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.mongodb</groupId>
-                    <artifactId>mongo-java-driver</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.junit.vintage</groupId>
