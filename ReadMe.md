@@ -1,6 +1,7 @@
 # Scheduling Service
 
-Welcome to Scheduling service.The follow document provides an over view of the services, with it's architecture and also how to use the service for deployment.
+Welcome to Scheduling service.The follow document provides an overview of the service. Scheduling service provides REST based interface on top of quartz scheduler 
+along with additional functionality of persisting each scheduled run in db.
 
 ## Tech Requirements
 
@@ -10,15 +11,23 @@ Welcome to Scheduling service.The follow document provides an over view of the s
 ## Technology Overview
 
 - [Architecture](wiki/architecture.md)
-- [API Documentation](wiki/api.md)
-
 
 ### Setting up db
-
+Set following env variables for db, username and password.
 <code>
-	pgsql/bin/pgsql -U postgres
-postgres=# create user quartz with password 'quartz123';
-postgres=# create database quartz with owner quartz;
-postgres=# \c quartz quartz
-quartz=> \i quartz-core/src/main/resources/org/quartz/impl/jdbcjobstore/tables_postgres.sql
-</code>>
+
+	export db=dev
+	export dbuser=dev
+	export dbpassword=dev
+
+</code>
+Refer these instructions to log in to psql and create db tables.
+<code>
+
+	pgsql/bin/pgsql -U dev
+	postgres=# create user dev with password 'dev';
+	postgres=# create database dev with owner dev;
+	postgres=# \c dev dev
+	Run deployment/db_migrations/quartz_table_postgres.sql to create db tables.
+
+</code>

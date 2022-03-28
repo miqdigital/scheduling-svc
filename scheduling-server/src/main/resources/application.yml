@@ -22,9 +22,9 @@ spring:
   application:
     name: scheduler-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/scheduling_local
-    username: quartz_user
-    password: admin
+    url: jdbc:postgresql://localhost:5432/${db}
+    username: ${dbuser}
+    password: ${dbpassword}
     driver-class-name: org.postgresql.Driver
     hikari.pool-name: hikari-pool
   jackson:
@@ -47,9 +47,9 @@ spring:
       hibernate.generate_statistics: true
   datasource.quartz-data-source:
     name: quartzDataSource-local
-    jdbc-url: jdbc:postgresql://localhost:5432/scheduling_local
-    username: quartz_user
-    password: admin
+    jdbc-url: jdbc:postgresql://localhost:5432/${db}
+    username: ${dbuser}
+    password: ${dbpassword}
     driver-class-name: org.postgresql.Driver
     maxConnections: 15
   quartz:
