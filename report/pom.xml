@@ -30,8 +30,6 @@
     </dependencies>
 
     <properties>
-        <maven.compiler.source>${jdk.version}</maven.compiler.source>
-        <maven.compiler.target>${jdk.version}</maven.compiler.target>
         <maven.jacoco.plugin.version>0.8.7</maven.jacoco.plugin.version>
         <sonar.coverage.jacoco.xmlReportPaths>
             ${basedir}/../${aggregate.report.dir}

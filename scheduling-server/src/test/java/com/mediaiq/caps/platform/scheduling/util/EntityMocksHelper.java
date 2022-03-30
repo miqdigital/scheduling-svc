@@ -49,6 +49,7 @@ public class EntityMocksHelper {
     Executor executor =
         Executor.builder().type(Executor.ExecutorType.HTTP).httpConfig(httpConfig).build();
 
+
     Schedule schedule =
         Schedule.builder().type(Schedule.ScheduleType.EVERY_N_MINUTES).value("10").build();
     Trigger trigger =

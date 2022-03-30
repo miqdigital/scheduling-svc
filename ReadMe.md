@@ -5,7 +5,7 @@ along with additional functionality of persisting each scheduled run in db.
 
 ## Tech Requirements
 
-- Java 8
+- Java 17
 - PostgreSQL 11
   
 ## Technology Overview
