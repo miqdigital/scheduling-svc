@@ -1,4 +1,4 @@
-FROM 836079437595.dkr.ecr.us-east-1.amazonaws.com/commons:openjdk-17
+FROM openjdk:17-alpine
 
 LABEL maintainer="platform@miqdigital.com"
 

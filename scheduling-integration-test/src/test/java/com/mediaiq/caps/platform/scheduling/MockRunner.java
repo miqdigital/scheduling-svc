@@ -10,9 +10,8 @@ public class MockRunner {
   private static final Logger logger = LoggerFactory.getLogger(PostgresRunner.class);
 
   public void startMockService() {
-    GenericContainer mock = new GenericContainer("836079437595.dkr.ecr.us-east-1."
-        + "amazonaws.com/platform-services:scheduling-mockservices-latest").withExposedPorts(
-        Constants.MOCKPORT);
+    GenericContainer mock = new GenericContainer("scheduling-mockservice")
+        .withExposedPorts(Constants.MOCKPORT);
     mock.start();
     int mappedPort = mock.getMappedPort(Constants.MOCKPORT);
     logger.info("mock started on {}", mappedPort);

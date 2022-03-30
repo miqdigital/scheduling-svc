@@ -31,3 +31,15 @@ Refer these instructions to log in to psql and create db tables.
 	Run deployment/db_migrations/quartz_table_postgres.sql to create db tables.
 
 </code>
+
+### Running integration test
+Build and install Scheduling mockservice docker image locally
+
+<code>
+
+    cd scheduling-mockservice 
+    docker build -t  scheduling-mockservice .
+
+</code>
+
+Run scheduling-integration-test/src/test/java/com/mediaiq/caps/platform/scheduling/RunnerTest.java

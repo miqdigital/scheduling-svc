@@ -1,4 +1,4 @@
-FROM 836079437595.dkr.ecr.us-east-1.amazonaws.com/commons:python-3
+FROM python:3.9-slim-bullseye
 
 RUN mkdir -p /usr/src/app
 RUN mkdir -p /usr/src/app/sqlite
