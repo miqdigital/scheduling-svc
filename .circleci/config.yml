@@ -1,0 +1,14 @@
+version: 2.1
+executors:
+  java17:
+    docker:
+      - image: 'cimg/openjdk:17.0'
+orbs:
+  maven: circleci/maven@1.3.0
+  secret_scan: eddiewebb/secret_scan@0.0.3
+workflows:
+  maven_test:
+    jobs:
+      - maven/test:
+          executor: java17
+          

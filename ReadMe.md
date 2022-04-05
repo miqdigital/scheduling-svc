@@ -12,25 +12,45 @@ along with additional functionality of persisting each scheduled run in db.
 
 - [Architecture](wiki/architecture.md)
 
-### Setting up db
+### Setting up db and running jar locally
+Login to psql shell and create db tables 
+<code>
+
+	make psql
+	dev=# \i deployment/db_migrations/quartz_table_postgres.sql
+
+</code>
+
+To reset db, 
+<code>
+	
+	make reset
+
+</code>
+
 Set following env variables for db, username and password.
 <code>
+Run 
+   . ./set-env.sh
+
+It will set following env variables , referred in spring application.yml   
 
 	export db=dev
 	export dbuser=dev
 	export dbpassword=dev
 
 </code>
-Refer these instructions to log in to psql and create db tables.
-<code>
 
-	pgsql/bin/pgsql -U dev
-	postgres=# create user dev with password 'dev';
-	postgres=# create database dev with owner dev;
-	postgres=# \c dev dev
-	Run deployment/db_migrations/quartz_table_postgres.sql to create db tables.
+Create jar file and run scheduling service
+
+<code>
+	
+	mvn clean install -DskipTests
+	java -jar ./scheduling-server/target/scheduling-server-1.12.0-jar-with-dependencies.jar
+
 
 </code>
+
 
 ### Running integration test
 Build and install Scheduling mockservice docker image locally
