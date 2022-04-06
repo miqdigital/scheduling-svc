@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/anuj147256/HelloWorld/tree/main.svg?style=svg)](https://circleci.com/gh/anuj147256/HelloWorld/tree/main)
+
+
 # Scheduling Service
 
 Welcome to Scheduling service.The follow document provides an overview of the service. Scheduling service provides REST based interface on top of 
