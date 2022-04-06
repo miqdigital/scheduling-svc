@@ -9,6 +9,5 @@ orbs:
 workflows:
   maven_test:
     jobs:
-      - maven/test:
-          executor: java17
+      - maven/test
           
