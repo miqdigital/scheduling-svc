@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/anuj147256/HelloWorld/tree/main.svg?style=svg)](https://circleci.com/gh/anuj147256/HelloWorld/tree/main)
+[![CircleCI](https://circleci.com/gh/miqdigital/scheduling-svc/tree/main.svg?style=svg)](https://circleci.com/gh/miqdigital/scheduling-svc/tree/main)
 
 
 # Scheduling Service
