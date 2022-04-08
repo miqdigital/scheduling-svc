@@ -1,0 +1,20 @@
+{
+  "name": "SimpleTask_HttpBinEvery5Minutes",
+  "description": "Simple task to call httpbin every 5 minutes",
+  "group": "TestService",
+  "creator": "user@test.com",
+  "trigger": {
+    "startDateTime": null,
+    "endDateTime": null,
+    "schedule": {
+      "type": "cronExpression",
+      "value": "0 0/5 * * * ?"
+    }
+  },
+  "executor": {
+    "type": "curl",
+    "curlConfig": {
+      "curlCommand": "curl -X GET 'http://httpbin.org'"
+    }
+  }
+}

@@ -1,0 +1,601 @@
+openapi: 3.0.0
+info:
+  description: |
+    Scheduling server.
+  version: "0.1.0"
+  title: Scheduling Service
+  contact:
+    email: user@test.com
+tags:
+  - name: Schedule Task
+    description: Scheduling Service CRUD operations on ScheduleTask
+paths:
+  /schedule-task:
+    post:
+      tags:
+        - Schedule Task
+      summary: Add a new scheduleTask
+      operationId: addScheduleTask
+      requestBody:
+        $ref: '#/components/requestBodies/scheduleTask'
+      responses:
+        200:
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scheduleTask'
+              example:
+                id: "9e6e0944-6047-4d32-ab5d-5d084270cc4e"
+                name: "HttpBinEvery5Minutes"
+                group: "integration-TestService-sample-workflow"
+                description: "This will call httpbin every 5 minutes"
+                creator: "user@test.com"
+                status: "ACTIVE"
+                created: "2020-03-18T16:00:00+05:30"
+                updated: "2020-03-18T16:00:00+05:30"
+                lastExecution: "1970-01-01T05:30:00+05:30"
+                nextExecution: "2020-03-18T16:25:00+05:30"
+                trigger:
+                  startDateTime: "2020-03-18T10:55:00Z"
+                  endDateTime: "2020-03-18T11:00:00Z"
+                  schedule:
+                    type: "cronExpression"
+                    value: "0/5 * * * * ?"
+                executor:
+                  type: "curl"
+                  curlConfig:
+                    curlCommand: "curl -X GET 'http://httpbin.org'"
+                  httpConfig: null
+        400:
+          description: "Validation error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        500:
+          description: "Server error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+    get:
+      tags:
+        - Schedule Task
+      summary: Get all existing scheduleTask
+      operationId: getScheduleTask
+      responses:
+        200:
+          description: 'Returns all scheduled tasks'
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/scheduleTask'
+        400:
+          description: "Validation error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        500:
+          description: "Server error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  '/schedule-task/{scheduleTaskId}':
+    get:
+      tags:
+        - Schedule Task
+      summary: Get scheduleTask by ID
+      description: Returns a single scheduled task
+      operationId: getScheduleTaskById
+      parameters:
+        - name: scheduleTaskId
+          in: path
+          description: ID of ScheduleTask to return
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scheduleTask'
+        400:
+          description: "Validation error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        500:
+          description: "Server error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+    put:
+      tags:
+        - Schedule Task
+      summary: Updates a scheduleTask
+      operationId: updateScheduleTask
+      parameters:
+        - name: scheduleTaskId
+          in: path
+          description: ID of schedule that needs to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/scheduleTask'
+      responses:
+        200:
+          description: ''
+          headers: { }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scheduleTask'
+        400:
+          description: "Validation error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        500:
+          description: "Server error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+    delete:
+      tags:
+        - Schedule Task
+      summary: Deletes a scheduleTask
+      operationId: deleteScheduleTask
+      parameters:
+        - name: scheduleTaskId
+          in: path
+          description: schedule id to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Successfully deleted the schedule"
+        400:
+          description: "Validation error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        500:
+          description: "Server error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  '/schedule-task/{scheduleTaskId}/execute-now':
+    post:
+      tags:
+        - Schedule Task
+      summary: Executes a scheduleTask once. Can be used for validation .This won't affect the existing runs and the run history
+      operationId: executeScheduleTask
+      parameters:
+        - name: scheduleTaskId
+          in: path
+          description: ID of schedule that needs to be updated
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Successfully executed the schedule"
+        400:
+          description: "Validation error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        500:
+          description: "Server error"
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  '/schedule-task/runs/group/{groupName}':
+    get:
+      tags:
+        - Schedule Task
+      summary: |
+        Returns an array of executions of scheduleTask corresponding to the given groupId.
+      operationId: getScheduleTaskRuns
+      parameters:
+        - name: groupName
+          in: path
+          description: Name of the group
+          schema:
+            type: string
+        - name: scheduleTaskId
+          in: query
+          description: ID of schedule task whose runs need to be fetched
+          schema:
+            type: string
+        - name: startDateTime
+          in: query
+          description: 'Start date-time ("in format yyyy-mm-ddThh:mm:ss+xx:yy e.g. 2020-03-18T15:15:31+05:30"). Note the "T" in middle'
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: endDateTime
+          in: query
+          description: 'End date-time ("in format yyyy-mm-ddThh:mm:ss+xx:yy e.g. 2020-03-18T15:15:31+05:30").  Note the "T" in middle'
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: executionStatus
+          in: query
+          description: Status i.e. success or failure
+          schema:
+            type: string
+            enum:
+              - SUCCESS
+              - FAILURE
+      responses:
+        200:
+          description: Successfully returns array of all executions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/scheduleTaskExecutionHistoryResponse'
+
+        400:
+          description: Validation error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        500:
+          description: Server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+  '/schedule-task/runs-info':
+    post:
+      tags:
+        - Schedule Task
+      summary: |
+        Returns an array of scheduled times at which the given Trigger will run. Output limited to 50 runs
+      operationId: getRunsInfo
+      requestBody:
+        $ref: '#/components/requestBodies/trigger'
+      responses:
+        200:
+          description: Successfully returns array of all execution timings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: date-time
+        400:
+          description: Validation error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        500:
+          description: Server error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+
+components:
+  schemas:
+    scheduleTask:
+      required:
+        - name
+        - description
+        - group
+        - creator
+        - trigger
+        - executor
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        group:
+          type: string
+        description:
+          type: string
+        creator:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+        lastExecution:
+          type: string
+          format: date-time
+        nextExecution:
+          type: string
+          format: date-time
+        trigger:
+          $ref: '#/components/schemas/trigger'
+        executor:
+          $ref: '#/components/schemas/executor'
+    trigger:
+      required:
+        - schedule
+      type: object
+      properties:
+        startDateTime:
+          type: string
+          description: Start date-time ("in format yyyy-mm-ddThh:mm:ss+xx:yy e.g. 2020-03-18T15:15:31+05:30"). Note the "T" in middle
+          format: date-time
+        endDateTime:
+          type: string
+          description: End date-time ("in format yyyy-mm-ddThh:mm:ss+xx:yy e.g. 2020-03-18T15:15:31+05:30").  Note the "T" in middle
+          format: date-time
+        schedule:
+          $ref: '#/components/schemas/schedule'
+    schedule:
+      required:
+        - type
+        - value
+      type: object
+      properties:
+        type:
+          type: string
+          description: scheduling expression type
+          enum:
+            - cronExpression
+            - predefinedExpression
+            - everyNMinutes
+        value:
+          type: string
+          description: cron expression or predefinedExpression strings (every15m, hourly, every3h, daily, weekly, fortnightly, monthly) or interval in minutes
+    executor:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of Executor
+          enum:
+            - curl
+            - http
+        curlConfig:
+          $ref: '#/components/schemas/curlConfig'
+        httpConfig:
+          $ref: '#/components/schemas/httpConfig'
+    curlConfig:
+      type: object
+      properties:
+        curlCommand:
+          type: string
+    httpConfig:
+      required:
+        - url
+        - method
+        - headers
+      type: object
+      properties:
+        url:
+          type: string
+        method:
+          type: string
+          description: http method
+          enum:
+            - GET
+            - PUT
+            - POST
+            - DELETE
+            - PATCH
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        body:
+          type: object
+          properties:
+            contentType:
+              type: string
+            content:
+              type: string
+    scheduleTaskExecutionHistoryResponse:
+      required:
+        - executionId
+        - scheduleTaskId
+        - scheduleDateTime
+        - startDateTime
+        - endDateTime
+        - executionStatus
+        - errorMessage
+      type: object
+      properties:
+        executionId:
+          type: integer
+          format: int32
+        scheduleTaskId:
+          type: string
+        scheduleDateTime:
+          type: string
+          format: date-time
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        executionStatus:
+          type: string
+          enum:
+            - SUCCESS
+            - FAILURE
+        errorMessage:
+          type: string
+          description: Error message if any in case of failure
+    errorModel:
+      required:
+        - status
+        - error
+        - message
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: current timestamp
+          format: date-time
+        status:
+          type: integer
+          description: HTTP error code
+          format: int32
+        error:
+          type: string
+          description: HTTP error text
+        code:
+          type: integer
+          description: Scheduling service error code
+          format: int32
+        message:
+          type: string
+          description: Scheduling service error description
+        path:
+          type: string
+          description: Http request path
+      description: Generic error report structure
+  requestBodies:
+    scheduleTask:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scheduleTask'
+          examples:
+            ScheduleTaskWithCron&Curl:
+              value:
+                name: HttpBinEvery5Minutes
+                group: "integration-TestService-sample-workflow"
+                description: This will call httpbin every 5 minutes
+                creator: user@test.com
+                trigger:
+                  startDateTime: "2020-03-18T16:25:00+05:30"
+                  endDateTime: "2020-03-18T16:30:00+05:30"
+                  schedule:
+                    type: cronExpression
+                    value: "0/5 * * * * ?"
+                executor:
+                  type: curl
+                  curlConfig:
+                    curlCommand: "curl -X GET 'http://httpbin.org'"
+            ScheduleTaskWithPredefinedExpression&Curl:
+              value:
+                name: HttpBinEvery15Minutes
+                group: "integration-TestService-sample-workflow"
+                description: This will call httpbin every 15 minutes
+                creator: user@test.com
+                trigger:
+                  startDateTime: "2020-03-18T16:25:00+05:30"
+                  endDateTime: "2020-03-18T16:30:00+05:30"
+                  schedule:
+                    type: predefinedExpression
+                    value: "every15m"
+                executor:
+                  type: curl
+                  curlConfig:
+                    curlCommand: "curl -X GET 'http://httpbin.org'"
+            ScheduleTaskWithCron&Http:
+              value:
+                name: HttpBinEvery5Minutes
+                group: "integration-TestService-sample-workflow"
+                description: This will call httpbin every 5 minutes
+                creator: user@test.com
+                trigger:
+                  startDateTime: "2020-03-18T16:25:00+05:30"
+                  endDateTime: "2020-03-18T16:30:00+05:30"
+                  schedule:
+                    type: cronExpression
+                    value: "0/5 * * * * ?"
+                executor:
+                  type: http
+                  httpConfig:
+                    url: "http://httpbin.org"
+                    method: "GET"
+                    headers:
+                      "ENVIRONMENT": "PRODUCTION"
+                      "PRODUCT": "sample"
+                      "TEAM": "PLATFORM"
+                    body:
+                      contentType: application/json
+                      content: "{'workflow': 'gold coast','workflowId':'gold-coast-1'}"
+            ScheduleTaskWithPredefinedExpression&Http:
+              value:
+                name: HttpBinEvery15Minutes
+                group: "integration-TestService-sample-workflow"
+                description: This will call httpbin every 15 minutes
+                creator: user@test.com
+                trigger:
+                  startDateTime: "2020-03-18T16:25:00+05:30"
+                  endDateTime: "2020-03-18T16:30:00+05:30"
+                  schedule:
+                    type: predefinedExpression
+                    value: "every15m"
+                executor:
+                  type: http
+                  httpConfig:
+                    url: "http://httpbin.org"
+                    method: "GET"
+                    headers:
+                      "ENVIRONMENT": "PRODUCTION"
+                      "PRODUCT": "sample"
+                      "TEAM": "PLATFORM"
+                    body:
+                      contentType: application/json
+                      content: "{'workflow': 'gold coast','workflowId':'gold-coast-1'}"
+      description: ScheduleTask having execution and scheduling config
+      required: true
+    trigger:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/trigger'
+          examples:
+            TriggerWithCron:
+              value:
+                startDateTime: "2020-03-18T16:25:00+05:30"
+                endDateTime: "2020-03-18T16:30:00+05:30"
+                schedule:
+                  type: cronExpression
+                  value: "0/5 * * * * ?"
+            TriggerWithPredefinedExpression:
+              value:
+                startDateTime: "2020-03-18T16:25:00+05:30"
+                endDateTime: "2020-03-18T16:30:00+05:30"
+                schedule:
+                  type: predefinedExpression
+                  value: "every15m"
+      description: Sample Triggers
+      required: true

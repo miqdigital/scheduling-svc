@@ -1,0 +1,106 @@
+server:
+  port: 8080
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+
+application:
+  schedulingServiceEnv: local
+  httpJobCallBackTimeout: 10
+  minSchedulingInterval: 5
+
+#Spring configuration
+spring:
+  application:
+    name: scheduler-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${db}
+    username: ${dbuser}
+    password: ${dbpassword}
+    driver-class-name: org.postgresql.Driver
+    hikari.pool-name: hikari-pool
+  jackson:
+    serialization.indent_output: true
+    serialization.WRITE_DATES_AS_TIMESTAMPS: false
+    deserialization.ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false
+
+    mapper:
+      accept_case_insensitive_properties: true
+  jpa:
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate.generate_statistics: true
+  datasource.quartz-data-source:
+    name: quartzDataSource-local
+    jdbc-url: jdbc:postgresql://localhost:5432/${db}
+    username: ${dbuser}
+    password: ${dbpassword}
+    driver-class-name: org.postgresql.Driver
+    maxConnections: 15
+  quartz:
+    jdbc:
+      initialize-schema: never
+    job-store-type: jdbc
+    properties:
+      org.quartz:
+        scheduler:
+          instanceId: AUTO
+          instanceName: QuartzPostgresScheduler_local
+        threadPool:
+          class: org.quartz.simpl.SimpleThreadPool
+          threadCount: 10
+          threadsInheritContextClassLoaderOfInitializingThread: true
+        jobStore:
+          class: org.quartz.impl.jdbcjobstore.JobStoreTX
+          driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+          tablePrefix: QRTZ_
+          isClustered: true
+          lockHandler:
+            class: org.quartz.impl.jdbcjobstore.StdRowLockSemaphore
+            maxRetry: 10
+            retryPeriod: 20000
+
+          #misfire -- 3 minutes = 3*60*1000
+          misfireThreshold: 180000
+        plugin:
+          shutdownHook:
+            class: org.quartz.plugins.management.ShutdownHookPlugin
+            cleanShutdown: false
+          jobHistory:
+            class: org.quartz.plugins.history.LoggingJobHistoryPlugin
+            jobToBeFiredMessage: "Job [{1}.{0}] to be fired by trigger [{4}.{3}], re-fire: {7}"
+            jobSuccessMessage: "Job [{1}.{0}] execution complete and reports: {8}"
+            jobFailedMessage: "Job [{1}.{0}] execution failed with exception: {8}"
+            jobWasVetoedMessage: >
+              Job [{1}.{0}] was vetoed. It was to be fired by
+              trigger [{4}.{3}] at: {2, date, dd-MM-yyyy HH:mm:ss.SSS}
+          triggerHistory:
+            class: org.quartz.plugins.history.LoggingTriggerHistoryPlugin
+            triggerFiredMessage: >
+              Trigger [{1}.{0}] fired job [{6}.{5}]
+              scheduled at: {2, date, dd-MM-yyyy HH:mm:ss.SSS},
+              next scheduled at: {3, date, dd-MM-yyyy HH:mm:ss.SSS}
+            triggerCompleteMessage: >
+              Trigger [{1}.{0}] completed firing job [{6}.{5}]
+              with resulting trigger instruction code: {9}.
+              Next scheduled at: {3, date, dd-MM-yyyy HH:mm:ss.SSS}
+            triggerMisfiredMessage: >
+              Trigger [{1}.{0}] misfired job [{6}.{5}].
+              Should have fired at: {3, date, dd-MM-yyyy HH:mm:ss.SSS}
+          jobExecutionHistory:
+            class: com.mediaiq.caps.platform.scheduling.util.ScheduledTaskExecutionHistoryPlugin

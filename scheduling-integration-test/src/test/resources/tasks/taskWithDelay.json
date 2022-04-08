@@ -1,0 +1,22 @@
+{
+  "name": "EditTask",
+  "description": "Simple task to call mockservice every 5 minutes with delay",
+  "group": "TestService",
+  "creator": "user@test.com",
+  "trigger": {
+    "startDateTime": null,
+    "endDateTime": null,
+    "schedule": {
+      "type": "cronExpression",
+      "value": "0 0/5 * * * ?"
+    }
+  },
+  "executor": {
+    "type": "http",
+    "httpConfig": {
+      "url": null,
+      "method": "GET",
+      "headers": {}
+    }
+  }
+}
