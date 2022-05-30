@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.mediaiq.caps.platform.scheduling</groupId>
+        <groupId>com.miqdigital.oss.scheduling</groupId>
         <artifactId>scheduling-service</artifactId>
         <version>1.12.0</version>
     </parent>
@@ -43,7 +43,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.mediaiq.caps.platform.scheduling</groupId>
+            <groupId>com.miqdigital.oss.scheduling</groupId>
             <artifactId>scheduling-commons</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
