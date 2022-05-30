@@ -103,4 +103,4 @@ spring:
               Trigger [{1}.{0}] misfired job [{6}.{5}].
               Should have fired at: {3, date, dd-MM-yyyy HH:mm:ss.SSS}
           jobExecutionHistory:
-            class: com.mediaiq.caps.platform.scheduling.util.ScheduledTaskExecutionHistoryPlugin
+            class: com.miqdigital.scheduling.server.util.ScheduledTaskExecutionHistoryPlugin

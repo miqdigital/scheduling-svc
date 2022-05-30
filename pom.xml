@@ -28,7 +28,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>17</jdk.version>
-        <main.class>com.mediaiq.caps.platform.scheduling.SchedulingServerStartUp</main.class>
+        <main.class>SchedulingServerStartUp</main.class>
         <maven.compiler.source>${jdk.version}</maven.compiler.source>
         <maven.compiler.target>${jdk.version}</maven.compiler.target>
         <commons-lang3.version>3.12.0</commons-lang3.version>

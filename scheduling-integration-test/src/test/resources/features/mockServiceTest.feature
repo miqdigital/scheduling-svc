@@ -26,7 +26,7 @@ Feature: test created schedule executes at correct times
     * def getStartDatePast =
     """
     function(min){
-      var Const = Java.type('com.mediaiq.caps.platform.scheduling.integration.utils.TimeUtils');
+      var Const = Java.type('com.miqdigital.scheduling.integration.utils.TimeUtils');
       var value = Const.getCurrentTimePlusMinutes(min);
       return value;
     }

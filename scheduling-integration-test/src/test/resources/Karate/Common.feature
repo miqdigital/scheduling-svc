@@ -13,7 +13,7 @@ Feature: Defining common functions for writing features
     * def getCurrentTime =
     """
     function() {
-    var Const = Java.type('com.mediaiq.caps.platform.scheduling.integration.utils.TimeUtils');
+    var Const = Java.type('com.miqdigital.scheduling.integration.utils.TimeUtils');
     var value = Const.getCurrentTime();
     return value;
     }
@@ -21,7 +21,7 @@ Feature: Defining common functions for writing features
     * def getStartDate =
     """
     function(mins) {
-    var Const = Java.type('com.mediaiq.caps.platform.scheduling.integration.utils.TimeUtils');
+    var Const = Java.type('com.miqdigital.scheduling.integration.utils.TimeUtils');
     var value = Const.getCurrentTimePlusMinutes(mins);
     return value;
     }
@@ -29,7 +29,7 @@ Feature: Defining common functions for writing features
     * def getStartDateInTimezone =
     """
     function(tz) {
-    var Const = Java.type('com.mediaiq.caps.platform.scheduling.integration.utils.TimeUtils');
+    var Const = Java.type('com.miqdigital.scheduling.integration.utils.TimeUtils');
     var value = Const.getCurrentTimePlusMinutes(3, tz);
     return value;
     }
@@ -37,7 +37,7 @@ Feature: Defining common functions for writing features
     * def getEndDate =
     """
     function(mins) {
-    var Const = Java.type('com.mediaiq.caps.platform.scheduling.integration.utils.TimeUtils');
+    var Const = Java.type('com.miqdigital.scheduling.integration.utils.TimeUtils');
     var value = Const.getCurrentTimePlusMinutes(mins);
     return value;
     }
@@ -45,7 +45,7 @@ Feature: Defining common functions for writing features
     * def getEndDateInTimezone =
     """
     function(mins,tz) {
-    var Const = Java.type('com.mediaiq.caps.platform.scheduling.integration.utils.TimeUtils');
+    var Const = Java.type('com.miqdigital.scheduling.integration.utils.TimeUtils');
     var value = Const.getCurrentTimePlusMinutes(mins, tz);
     return value;
     }
@@ -60,7 +60,7 @@ Feature: Defining common functions for writing features
     * def getDateTimeMillis =
     """
     function(date) {
-    var Const = Java.type('com.mediaiq.caps.platform.scheduling.integration.utils.TimeUtils');
+    var Const = Java.type('com.miqdigital.scheduling.integration.utils.TimeUtils');
     var value = Const.getMillis(date);
     return value;
     }
