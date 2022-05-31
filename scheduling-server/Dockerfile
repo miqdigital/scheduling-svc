@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine
+FROM eclipse-temurin:17-jdk-focal
 
 RUN apt-get --no-install-recommends update && apt-get --no-install-recommends install -y \
     curl \

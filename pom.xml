@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.mediaiq.caps.platform.scheduling</groupId>
+    <groupId>com.miqdigital.oss.scheduling</groupId>
     <artifactId>scheduling-service</artifactId>
     <version>1.12.0</version>
     <packaging>pom</packaging>

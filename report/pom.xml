@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>scheduling-service</artifactId>
-        <groupId>com.mediaiq.caps.platform.scheduling</groupId>
+        <groupId>com.miqdigital.oss.scheduling</groupId>
         <version>1.12.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -12,12 +12,12 @@
     <artifactId>report</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.mediaiq.caps.platform.scheduling</groupId>
+            <groupId>com.miqdigital.oss.scheduling</groupId>
             <artifactId>scheduling-server</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.mediaiq.caps.platform.scheduling</groupId>
+            <groupId>com.miqdigital.oss.scheduling</groupId>
             <artifactId>scheduling-commons</artifactId>
             <version>${parent.version}</version>
         </dependency>
