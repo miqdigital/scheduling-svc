@@ -27,7 +27,7 @@ public class RunnerTest {
     SchedulingServerStartUp.main(new String[] {""});
     TimeUnit.SECONDS.sleep(10);
     final Results stats =
-        Runner.path("classpath:features").tags("@sanity,@regression").parallel(2);
+        Runner.path("classpath:features").tags("@faile").parallel(2);
     Assert.assertEquals("There are scenario failures", 0, stats.getFailCount());
   }
 }

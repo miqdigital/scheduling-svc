@@ -17,7 +17,7 @@ import com.miqdigital.scheduling.server.config.ApplicationConfig;
 
 
 @ComponentScan(basePackages = {"com.miqdigital.scheduling.server"})
-@EntityScan("com.miqdigital.scheduling.server")
+@EntityScan("com.miqdigital.scheduling.commons")
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableTransactionManagement

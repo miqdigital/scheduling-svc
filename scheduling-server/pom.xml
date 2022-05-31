@@ -17,7 +17,6 @@
     <description>Scheduling Server</description>
 
     <properties>
-        <main.class>com.miqdigital.scheduling.server.SchedulingServerStartUp</main.class>
         <commons-io.version>2.11.0</commons-io.version>
         <sonar.coverage.jacoco.xmlReportPaths>
             ${basedir}/../${aggregate.report.dir}
