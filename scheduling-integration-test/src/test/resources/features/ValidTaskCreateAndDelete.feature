@@ -89,7 +89,7 @@ Feature: create, delete, execute now and get features with a valid task
     * def getEndDateLong =
     """
     function() {
-    var Const = Java.type('com.mediaiq.caps.platform.scheduling.integration.utils.TimeUtils');
+    var Const = Java.type('com.miqdigital.scheduling.integration.utils.TimeUtils');
     var value = Const.getCurrentDatePlusMonths(2);
     return value;
     }

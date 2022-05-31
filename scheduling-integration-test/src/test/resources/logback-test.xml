@@ -8,7 +8,7 @@
             </pattern>
         </encoder>
     </appender>
-    <logger name="com.mediaiq.caps.platform.scheduling" level="DEBUG" additivity="false">
+    <logger name="com.miqdigital.scheduling" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
     <logger name="com.intuit.karate" level="DEBUG" additivity="false">

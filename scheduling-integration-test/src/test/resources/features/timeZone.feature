@@ -16,7 +16,7 @@ Feature: test execution for different time zones
     * def getAbsoluteCron =
     """
     function(date) {
-      var Const = Java.type('com.mediaiq.caps.platform.scheduling.integration.utils.TimeUtils');
+      var Const = Java.type('com.miqdigital.scheduling.integration.utils.TimeUtils');
       var value = Const.getAbsoluteCron(date);
       return value;
     }
